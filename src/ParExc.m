@@ -1,4 +1,4 @@
-clc; close all;
+clear; clc; close all;
 
 %% Parâmetros da solução
 
@@ -26,7 +26,7 @@ lim = permaTime; % deslocamento normalizado
 % Salvar ou não salvar figuras
 save_figU = false;      % Resultados série temporal e espectro de amplitude
 save_figA = false;      % Espaços de fase e séries temporais das funções Aks
-save_figInterp = false;  % Funções de interpolação dos modos de vibrar
+save_figInterp = true;  % Funções de interpolação dos modos de vibrar
 save_matDesloc = false; % Série temporal na forma de um único gráfico de cores
 save_respAmpli = false;  % Resposta total
 save_respAmpli_Ak = false; % Respostas modais
@@ -60,6 +60,7 @@ eixos_graficos = ["u(L/4,\tau)/D" "u(L/2,\tau)/D" "u(3L/4,\tau)/D"; ...
 nomes_figuras = ["u25L" "u50L" "u75L"; "A1" "A2" "A3"; "p25" "p50" "p75"];
 % Formato a ser salvo
 figFormat = '-dpng';
+[~,~] = mkdir('.\figs\test');
 
 %% Dados do problema
 diam = 22.2/1000;
@@ -139,7 +140,7 @@ modo3 = sin(3*pi/L*z);
 
 if figInterp == true
     Plot_interp(z/L, [modo1' modo2' modo3'], ["-k" "--r" "-.b"], FontSize, FontSizeLegend, ...
-        FontName, [.1 .1 .5 .8], loc(2), save_figInterp, "funcoes de interpolacao", figFormat)
+        FontName, [.1 .1 .5 .8], loc(2), save_figInterp, "shape_functions", figFormat)
 end
 
 %%  Resolução do modelo para o(s) valor(es) de 'n'
