@@ -1,14 +1,16 @@
 function []=Plot_general(x, y, dy, titulo_y, titulo_dy, titulo_Amp, save, ...
     vetor_freq, vetor_amp, tipos_graficos, ...
     FontSize, FontSizeLegend, FontName, pos, loc, ...
-    lim_y, lim_freq, nomeFig, espectro, espFase, figFormat)
+    lim_y, lim_freq, nomeFig, espectro, espFase, figFormat, thistab)
 %% Cabeçalho
 
 %% Corpo
 % Abre uma figura com fundo branco e eixos
-figure('name',nomeFig,'units', 'normalized', 'position', pos, 'color', 'w');
-hold on; box on;
+% figure('name',nomeFig,'units', 'normalized', 'position', pos, 'color', 'w');
+% hold on; box on;
 
+thistab0 = uitab('Title',nomeFig,'BackgroundColor', 'w'); % build iith tab
+axes('Parent',thistab0); % somewhere to plot
 if espectro == true && espFase == true
     % Descrição temporal do deslocamento normalizado
     subplot(2,2,2)

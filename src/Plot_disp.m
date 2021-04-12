@@ -14,8 +14,10 @@ t_plot=t(inicio:fim); % Novo vetor tempo
 mat = (x(inicio:fim,1)*modo1+x(inicio:fim,2)*modo2+x(inicio:fim,3)*modo3)';
 
 % Abre uma figura
-figure('name', nomeFig,'units', 'normalized', 'position', pos, 'color', 'w');
-box on;
+% figure('name', nomeFig,'units', 'normalized', 'position', pos, 'color', 'w');
+% box on;
+thistab = uitab('Title',nomeFig); % build iith tab
+axes('Parent',thistab); % somewhere to plot
 
 % Plota dados e reformata cores
 pcolor(t_plot, z, mat)
