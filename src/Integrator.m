@@ -1,5 +1,7 @@
 function y=Integrator(t,x,a,b,g,d,ep,n,mor,modo1,modo2,modo3)
 
+
+
 % Velocidades
 y(1,1)=x(4,1);
 y(2,1)=x(5,1);

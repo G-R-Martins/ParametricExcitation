@@ -1,12 +1,14 @@
 function [] = Plot_Amp(n, A, tipos_linhas, titulos_eixos, FontSize, ...
-    FontSizeLegend, FontName, pos, loc, save, nomeFig, figFormat)
+    FontSizeLegend, FontName, pos, loc, save, nomeFig, figFormat, thistab)
 %% Cabeçalho
 
 
 %% Corpo
-figure('name', nomeFig,'units', 'normalized', 'position', pos, 'color', 'w');
-hold on; box on;
+% figure('name', nomeFig,'units', 'normalized', 'position', pos, 'color', 'w');
+% hold on; box on;
 
+thistab0 = uitab('Title',nomeFig); % build iith tab
+axes('Parent',thistab0); % somewhere to plot
 % Plota os gráficos na mesma figura
 if size(A,1) > 1
     for cont=1:size(A,2)
@@ -31,5 +33,5 @@ if save == true
     print(nomeFig, figFormat, '-r1000')
 end
 
-hold off
+% hold off
 end
