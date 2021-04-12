@@ -12,13 +12,18 @@ classdef SolutionOpt
         tf = 10000;
         permaTime = [8000 8050]; % permanent regime
         
-        % Frequency non-dimensional 'n'
+        % Non-dimensional frequency - 'n'
         n0 = 2
         dn = 1  % CAN NOT BE ZERO
         nf = 7
     end
     
-    methods
+    %% Methods
+    methods (Static)
+        
+        % Constructor
+        function obj = SolutionOpt()
+        end
         
     end
 end

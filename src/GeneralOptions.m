@@ -6,14 +6,16 @@ classdef GeneralOptions
     %% Properties
     properties
         
+        % Objects
+        Env (1,1) Environment
+        SolOpt (1,1) SolutionOpt
+                
+        % Data to include
         include_FEM_water (1,1) logical
         include_FEM_air (1,1) logical
         include_ROM_water (1,1) logical
         include_ROM_air (1,1) logical
         
-        Env (1,1) Environment
-        SolOpt (1,1) SolutionOpt
-        Plts (1,1) Plots
     end
     
     
@@ -21,18 +23,25 @@ classdef GeneralOptions
     
     methods    
         
-        % Constructor
-        function obj = GeneralOptions(FEM_water,FEM_air,ROM_water,ROM_air)
+        %% Constructor
+        function this = GeneralOptions(FEM_water,FEM_air,ROM_water,ROM_air)
             
-            obj.include_FEM_water = FEM_water;
-            obj.include_FEM_air = FEM_air;
-            obj.include_ROM_water = ROM_water;
-            obj.include_ROM_air = ROM_air;
+            this.include_FEM_water = FEM_water;
+            this.include_FEM_air = FEM_air;
+            this.include_ROM_water = ROM_water;
+            this.include_ROM_air = ROM_air;
             
-            obj.Env = Environment();
-            obj.Plts = Plots();
-            obj.SolOpt = SolutionOpt();
+            this.Env = Environment();
+            this.SolOpt = SolutionOpt();
+            
         end
+        
+       
+        % Get/set methods.
+%         
+%         function envObj = get.Env( this )
+%             envObj = this.Env;
+%         end %         
         
     end
 end

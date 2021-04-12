@@ -4,11 +4,24 @@ clear; clc; close all;
 
 %% Set general options
 gOpt = GeneralOptions(0,0,1,1);
+beamData = SetBeamData();
 
 
-%% Set lot options
+%% Shape functions
+shpFun = ShapeFunctions(beamData.L,3);
+
+
+%% Set plot options
 %%% such as which data to plot and save
 
+
+
+
+%% Manage Reduced Order Model (ROM) data
+rom_imm = ROM(0.09,true,beamData);
+rom_imm_c0 = ROM(0.0,true,beamData);
+rom_air = ROM(0.09,false,beamData);
+rom_air_c0 = ROM(0.0,false,beamData);
 
 
 %% Manage Finite Element Model (Giraffe) data
@@ -17,7 +30,6 @@ gOpt = GeneralOptions(0,0,1,1);
 
 
 
-%% Manage Reduced Order Model (ROM) data
 
 
 
