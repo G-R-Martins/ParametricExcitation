@@ -1,5 +1,6 @@
-classdef Plots
+classdef Plots < handle
     %% Plots summary 
+    
     
     %% Save options
     properties (GetAccess = protected, SetAccess = protected)
@@ -12,17 +13,26 @@ classdef Plots
         FontSizeLegend = 16;
         FontName = "Cambria Math";
         MarkerSize = 15;
-        pos = [.1 0.1 .8 .8];
+        default_pos = [.1 0.1 .8 .8];
+        default_paperSize = [3.5 6];
         figFormat = '-dpng'; % Format to save
+        
+        
+        lines = ["-k" "-r" "-g" "-b"; ...
+            "--k" "--r" "--g" "--b";
+            "-.k" "-.r" "-.g" "-.b"];
+        dots = [".k" ".r" ".g" ".b"];
+		
+		lim_plot_freq = [0 6];
     end
     
 
     %% Methods
     methods (Abstract)
         
-        SinglePlot(this, data, name, lines, labels, lgnd)
-        Plot(this)
-        
+        SinglePlot(this, data, name)
+        MultiTabPlot(this, k)
+        SetPlotLabels(this, xlabels, ylabels)
     end
     
     
@@ -31,29 +41,9 @@ classdef Plots
         
         %% Create window to include plots in different tabs
         function this = OpenTabularPlot(this,tabGroupName)
-            figure('Name',tabGroupName,'units', 'normalized', 'position', this.pos, 'color', 'w');
+            figure('Name',tabGroupName,'units', 'normalized', 'position', this.default_pos, 'color', 'w');
             uitabgroup;
         end
-        
-        
-        
-        
-%         %% Plot(s) in a single figure
-%         function singlePlot(this, data, name, lines, labels, lgnd)
-%             figure('Name',name,'units', 'normalized', 'position', this.pos, 'color', 'w');
-%             hold on; box on;
-%             
-%             % PLot lines
-%             for k=1:size(data,2)
-%                 plot(data(:,k), z, lines(k));
-%             end
-%             
-%             xlabel(labels(1), 'FontName', this.FontName, 'fontsize', this.FontSize);
-%             ylabel(labels(2), 'FontName', this.FontName, 'fontsize', this.FontSize);
-%             set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize);
-%             legend(lgnd, 'FontName', this.FontName, 'FontSize', this.FontSizeLegend, 'Location', loc);
-%             
-%         end
         
     end
 end

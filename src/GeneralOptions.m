@@ -4,12 +4,14 @@ classdef GeneralOptions
     
     
     %% Properties
-    properties
+    properties (Constant, GetAccess = public)%, SetAccess = protected)
         
         % Objects
-        Env (1,1) Environment
-        SolOpt (1,1) SolutionOpt
-                
+        Env =  Environment();
+        SolOpt = SolutionOpt();
+    end
+    
+    properties (GetAccess = public, SetAccess = protected)
         % Data to include
         include_FEM_water (1,1) logical
         include_FEM_air (1,1) logical
@@ -21,7 +23,7 @@ classdef GeneralOptions
     
     %% Methods
     
-    methods    
+    methods (Static)
         
         %% Constructor
         function this = GeneralOptions(FEM_water,FEM_air,ROM_water,ROM_air)
@@ -31,9 +33,12 @@ classdef GeneralOptions
             this.include_ROM_water = ROM_water;
             this.include_ROM_air = ROM_air;
             
-            this.Env = Environment();
-            this.SolOpt = SolutionOpt();
-            
+            % Common parameters (immersed and in air)
+            global beamData;
+            beamData = struct('d',22.2/1000,'L',2.552,'At',0.01*2.552,...
+                'EI',0.056,'EA',1200, 'Tt',38.36,'f1',0.83,'mu',1.19,...
+                'w1',2*pi*0.83,'W1',2*2*pi*0.83,...
+                'mu_d',this.Env.rho*pi*(22.2/1000)^2/4,'m',1.19/(this.Env.rho*pi*(22.2/1000)^2/4));
         end
         
        

@@ -1,4 +1,4 @@
-function y=Integrator(t,x,a,b,g,d,ep,n,mor,modo1,modo2,modo3)
+function y=Integrator_old(t,x,a,b,g,d,ep,n,mor,modo1,modo2,modo3)
 
 
 
