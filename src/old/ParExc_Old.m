@@ -190,7 +190,7 @@ for n=n0:dn:nf
             
             % Espectros de amplitude do sinal de deslocamentos
             if espectroU == true
-                [vetor_freq,vetor_amp,fd,Ad] = Spectrum(t_sol,U_k);
+                [vetor_freq,vetor_amp,fd,Ad] = Spectrum_old(t_sol,U_k);
             else
                 vetor_freq = []; vetor_amp=[];
             end
@@ -207,7 +207,7 @@ for n=n0:dn:nf
             
             % Espectros de amplitude do sinal de deslocamentos
             if espectroA == true
-                [vetor_freq,vetor_amp,fd,Ad] = Spectrum(t_sol,x_sol(:,k));
+                [vetor_freq,vetor_amp,fd,Ad] = Spectrum_old(t_sol,x_sol(:,k));
             else
                 vetor_freq = []; vetor_amp=[];
             end

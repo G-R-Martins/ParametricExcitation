@@ -14,7 +14,7 @@ classdef ShapeFunctions < Plots & handle
         disc (1,1) = 1000;
         % Arguments of the shape functions sines
         sin_args
-        % Vertical nodes
+        % Beam nodes
         z
         % Modes
         modes
@@ -23,7 +23,7 @@ classdef ShapeFunctions < Plots & handle
         labels (1,2) string = ["\psi_k(z)" "z/L"];
         legends cell = {'k = 1','k = 2','k = 3'}
         plt_lines string = ["-k" "--r" "-.b"]
-        dir_fig = '.\figs' 
+        dir_fig = '..\figs' 
     end
     
     methods (Static)
@@ -35,11 +35,6 @@ classdef ShapeFunctions < Plots & handle
             % Vertical discretization
             this.z = linspace(0,L,this.disc);
             
-            % Recurrent coefficient used to integrate ROM EDOs
-            global coef
-            % Still needs to be multiplied by the Gamma nondimensional (L_m), which is done in ROM
-            coef = this.z(2)-this.z(1); 
-                        
             % Setting modes (shape functions)
             this.n_modes = n_modes;
             this.modes = zeros(n_modes,size(this.z,2));
@@ -63,17 +58,16 @@ classdef ShapeFunctions < Plots & handle
             figure('Name',name,'units', 'normalized', 'position', [.1 .1 .5 .8], 'color', 'w');
             hold on; box on;
             
-            % Plota os gráficos na mesma figura
+            % Ploting shape functions in the same figure
             for ii=1:3
                 plot(this.modes(ii,:), this.z/beamData.L, this.plt_lines(ii));
             end
             
             xlabel(this.labels(1,1), 'FontName', this.FontName, 'fontsize', this.FontSize);
             ylabel(this.labels(1,2), 'FontName', this.FontName, 'fontsize', this.FontSize);
-%             set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize);
             legend(this.legends,'FontName', this.FontName, 'FontSize', this.FontSizeLegend, 'Location', 'southwest');
             
-            % Salva figura se o booleano save_figAks for verdadeiro
+            % Save figure
             if this.save_fig == true
                 set(gcf,'PaperSize', this.default_paperSize);
                 print(fullfile(this.dir_fig, name), this.figFormat, '-r1000')
@@ -87,24 +81,7 @@ classdef ShapeFunctions < Plots & handle
         function [] = MultiTabPlot(~)
             error('Shapae function object can not use ''MultTabPlot'' function. It is only allowed to plot shape functions in a single figure. \n Please, use ''SinglePlot'' function');
         end
-        
-        
-        % Set plot x,y-axes labels
-        function this = SetPlotLabels(this, labels_disp, labels_vel)
-            this.labels.a = labels_disp;
-            this.labels.da = labels_vel;
-        end
-        
-        
-        
-        
-        
-%         % Set
-%         function set.BorderType( obj, value )
-%             
-%             obj.Panel.BorderType = value;
-%             
-%         end % set.BorderType
+                
     end
     
 end

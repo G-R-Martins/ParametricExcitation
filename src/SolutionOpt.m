@@ -9,7 +9,7 @@ classdef SolutionOpt
         % Time 
         ti = 0;
         dt = 0.05;
-        tf = 10000;
+        tf = 8100;
         permaTime = [8000 8050]; % permanent regime
         
         % Non-dimensional frequency - 'n'

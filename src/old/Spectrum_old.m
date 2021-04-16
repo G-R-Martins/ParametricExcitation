@@ -1,4 +1,4 @@
-function [freq,Amp,fd,Ad] = Spectrum(t, sinal)
+function [freq,Amp,fd,Ad] = Spectrum_old(t, sinal)
 %% Cabeçalho
 %[freq,Amp,fd,Ad]=EspectroAmplitude(t,sinal)
 % Entradas - t -> vetor de tempo

@@ -28,24 +28,32 @@ classdef ROM < Plots & handle
         d double  % deltas
         
         % Solution of the ODEs
-        t_sol
-        x_sol
+        t_sol double
+        x_sol double
         
         % Time series 
-        U     % displacement
-        V     % velocities
+        U  cell   % displacement
+        V  cell   % velocities
         
         % Spectrum
-        Freq  % frequency
-        Ampl  % amplitude
-        Fd    % dominant frequency
-        Ad    % dominant amplitude
+        Freq  cell    % frequency
+        Ampl  cell    % amplitude
+        Fd    (1,3) double  % dominant frequency
+        Ad    (1,3) double  % dominant amplitude
         
         % Struct with output booleans 
         out_bools 
         
-        % Plot labels (not equals for all cases)
-        labels struct
+        % Morison nondimensional
+        mor_coef (1,1) double
+        
+    end
+    
+    properties (Constant)
+        titles = ["u(L/4)" "u(L/2)" "u(3L/4)"];
+        labels = struct('u',["u(L/4,\tau)/D" "u(L/2,\tau)/D" "u(3L/4,\tau)/D"],...
+            'du',["u'(L/4,\tau)/D" "u'(L/2,\tau)/D" "u'(3L/4,\tau)/D"]);
+        
     end
     
     properties
@@ -56,16 +64,22 @@ classdef ROM < Plots & handle
     
     methods 
         
-        % Constructor
+        %% Constructor
         function this = ROM(c, bool_immersed)
             global beamData
+            
+            % Initialize empty cells
+            this.U{3} = {};% displacement
+            this.V{3} = {}; % velocities
+            this.Freq{3} = {}; % frequency
+            this.Ampl{3} = {};% amplitude
             
             % Initialize modal amplitude object
             this.mAmp = ModalAmp();
             
             this.c = c;
             this.isImmersed = bool_immersed;
-                        
+            
             if bool_immersed == false
                 this.mu_a = 0;
                 this.Cd = 0;
@@ -77,7 +91,6 @@ classdef ROM < Plots & handle
                     - Environment.rho*Environment.grav*pi*beamData.d^2/4;
             end
                         
-%             beamData.m = beamData.mu/beamData.mu_d;
             this.Ca = this.mu_a/beamData.mu_d;
                         
             % Lambda_M (Morison)
@@ -117,21 +130,25 @@ classdef ROM < Plots & handle
         end
         
         
-        function this = SetOutputOptions(this, fig, scalogram, phaseSpace)
+        %% Functions
+        
+        % Setting plot/save options
+        function this = SetOutputOptions(this, save_fig, save_scalogram, show_phaseSpace, show_scalogram)
             % Saving options
-            this.out_bools.save_fig = fig;
-            this.out_bools.save_scalogram = scalogram;
+            this.out_bools.save_fig = save_fig;
+            this.out_bools.save_scalogram = save_scalogram;
         
             % Plot options
-            this.out_bools.phaseSpace = phaseSpace;
+            this.out_bools.phaseSpace = show_phaseSpace;
+            this.out_bools.scalogram = show_scalogram;
         end
         
         
         % Evaluate displacements and velocities
         function this = CalculateResults(this, modes, k)
 			sz = size(modes,2)*k/4;
-            this.U = this.x_sol(:,1)*modes(1,sz) + this.x_sol(:,2)*modes(2,sz) + this.x_sol(:,3)*modes(3,sz);
-            this.V = this.x_sol(:,1+3)*modes(1,sz) + this.x_sol(:,2+3)*modes(2,sz) + this.x_sol(:,3+3)*modes(3,sz);
+            this.U{k} = this.x_sol(:,1)*modes(1,sz) + this.x_sol(:,2)*modes(2,sz) + this.x_sol(:,3)*modes(3,sz);
+            this.V{k} = this.x_sol(:,1+3)*modes(1,sz) + this.x_sol(:,2+3)*modes(2,sz) + this.x_sol(:,3+3)*modes(3,sz);
         end
         
         
@@ -149,9 +166,6 @@ classdef ROM < Plots & handle
             % Initialize matrix to put results
             y = zeros(6,1);
             
-            % Recurrent coefficient
-            global coef
-
             % Velocities
             y(1,1)=x(4,1);
             y(2,1)=x(5,1);
@@ -161,21 +175,21 @@ classdef ROM < Plots & handle
             y(4,1)=-this.a(1)*x(4,1) - (this.d(1)+this.ep(1)*cos(n*t))*x(1,1) ...
                 -this.a(2)*x(2,1) - this.a(3)*x(1,1)^3 ...
                 - this.a(4)*x(1,1)*x(2,1)^2 - this.a(5)*x(1,1)*x(3,1)^2 ...
-                -coef*(modes(1,:)*((x(4,1)*modes(1,:)+...
+                -this.mor_coef*(modes(1,:)*((x(4,1)*modes(1,:)+...
                 x(5,1)*modes(2,:)+x(6,1)*modes(3,:)).*abs(x(4,1)*modes(1,:)...
                 +x(5,1)*modes(2,:)+x(6,1)*modes(3,:)))');
             
             y(5,1)=-this.b(1)*x(5,1) - (this.d(2)+this.ep(2)*cos(n*t))*x(2,1)...
                 -this.b(2)*x(3,1) - this.b(3)*x(1,1) - this.b(4)*x(2,1)*x(1,1)^2 ...
                 - this.b(5)*x(2,1)^3-this.b(6)*x(2,1)*x(3,1)^2 ...
-                -coef*(modes(2,:)*((x(4,1)*modes(1,:)+...
+                -this.mor_coef*(modes(2,:)*((x(4,1)*modes(1,:)+...
                 x(5,1)*modes(2,:)+x(6,1)*modes(3,:)).*abs(x(4,1)*modes(1,:)...
                 +x(5,1)*modes(2,:)+x(6,1)*modes(3,:)))');
             
             y(6,1)=-this.g(1)*x(6,1) - (this.d(3)+this.ep(3)*cos(n*t))*x(3,1)...
                 -this.g(2)*x(2,1) - this.g(3)*x(3,1)*x(2,1)^2 ...
                 - this.g(4)*x(3,1)*x(1,1)^2 - this.g(5)*x(3,1)^3 ...
-                -coef*(modes(3,:)*((x(4,1)*modes(1,:)+...
+                -this.mor_coef*(modes(3,:)*((x(4,1)*modes(1,:)+...
                 x(5,1)*modes(2,:)+x(6,1)*modes(3,:)).*abs(x(4,1)*modes(1,:)...
                 +x(5,1)*modes(2,:)+x(6,1)*modes(3,:)))');
             
@@ -183,21 +197,21 @@ classdef ROM < Plots & handle
                 
         
         % Calculate frequency spectrum
-        function this = CalculateSpectrum(this)
-            [this.Freq, this.Ampl, this.Fd, this.Ad] = Spectrum(this.t_sol, this.U);
+        function this = CalculateSpectrum(this,k)
+            [this.Freq{k}, this.Ampl{k}, this.Fd(k), this.Ad(k)] = Spectrum(this.t_sol, this.U{k});
         end
         
         
-        % Set plot x,y-axes labels
-        function this = SetPlotLabels(this, labels_disp, labels_vel)
-            this.labels = struct('u',labels_disp, 'du',labels_vel);
-        end
-        
+%         % Set plot x,y-axes labels
+%         function this = SetPlotLabels(this, labels_disp, labels_vel)
+%             this.labels = struct('u',labels_disp, 'du',labels_vel);
+%         end
+%         
         
         % Plot in multiple tabs
-        function this = MultiTabPlot(this, name, k)
+        function this = MultiTabPlot(this, k)
             % Open new tab
-            thistab = uitab('Title',name,'BackgroundColor', 'w'); % build iith tab
+            thistab = uitab('Title',this.titles(k),'BackgroundColor', 'w'); % build iith tab
             axes('Parent',thistab); % somewhere to plot
             
             if this.out_bools.phaseSpace == true
@@ -208,7 +222,7 @@ classdef ROM < Plots & handle
                 ylabel(this.labels.u(k),'FontName',this.FontName,'fontsize',this.FontSize)
                 set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime)
                 
-                plot(this.t_sol, this.U, this.lines(1,1))
+                plot(this.t_sol, this.U{k}, this.lines(1,1))
                 
                 
                 % Frequency spectrum
@@ -218,7 +232,7 @@ classdef ROM < Plots & handle
                 ylabel("Amplitude", 'FontName', this.FontName, 'fontsize', this.FontSize)
                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
                 
-                plot(this.Freq, this.Ampl, this.lines(1,1))
+                plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1))
                 
                 % Phase space
                 %%% Para plotar o espaço de fase do intervalo de interesse, deve-se extrair
@@ -234,7 +248,7 @@ classdef ROM < Plots & handle
                 ylabel(this.labels.du(k), 'FontName', this.FontName, 'fontsize', this.FontSize)
                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize)
                 
-                plot(this.U(begin:finish,1), this.V(begin:finish,1), this.lines(1,1));
+                plot(this.U{k}(begin:finish,1), this.V{k}(begin:finish,1), this.lines(1,1));
                 
              else
                  % Displacement time series
@@ -244,7 +258,7 @@ classdef ROM < Plots & handle
                  ylabel(this.labels.u(k),'FontName', this.FontName, 'fontsize', this.FontSize);
                  set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime);
                  
-                 plot(this.t_sol, this.U, this.lines(1,1));
+                 plot(this.t_sol, this.U{k}, this.lines(1,1));
                  
                  
                  % Frequency spectrum
@@ -254,19 +268,52 @@ classdef ROM < Plots & handle
                  ylabel('Amplitude', 'FontName', this.FontName, 'fontsize', this.FontSize)
                  set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
                  
-                 plot(this.Freq, this.Ampl, this.lines(1,1))
+                 plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1))
             end
             
             
         end
         
-        
+        %%% TODO
         function this = SinglePlot(this, data, ~)
             if isempty(data)
                 error('ROM object is supposed to use MultiTabPlot with contains no data to plot');
             end
         end
         
+        
+        %% Plot scalogram
+        function this = PlotScalogram(this, z_norm, modes)
+            % "Extrai" o tempo desejado (em regime permanente)
+            [lin,~] = find(this.t_sol(:,1) >= GeneralOptions.SolOpt.permaTime(1) ...
+                & this.t_sol(:,1) <= GeneralOptions.SolOpt.permaTime(2));
+            begin = lin(1);
+            finish = lin(size(lin,1));
+            t_plot=this.t_sol(begin:finish); % new time vector
+            
+            % Matrix with coordinates
+            mat = (this.x_sol(begin:finish,1)*modes(1,:)+this.x_sol(begin:finish,2)*modes(2,:)+this.x_sol(begin:finish,3)*modes(3,:))';
+            
+            % Open new tab
+            thistab = uitab('Title','Scalogram','BackgroundColor', 'w'); 
+            axes('Parent',thistab); % somewhere to plot
+            
+            % Plot data and change colors
+            pcolor(t_plot, z_norm, mat)
+            shading 'Interp'
+            
+            % Color bar plot
+            cb = colorbar;
+            cb.Label.String = 'u(z/L,\tau)/D';
+            cb.Label.FontSize = this.FontSize;
+            cb.Label.FontName = this.FontName;
+            
+            % Legends
+            xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
+            ylabel('z/L', 'FontName', this.FontName, 'fontsize', this.FontSize)
+            set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize)
+            
+        end
         
     end
 end

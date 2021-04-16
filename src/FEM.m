@@ -2,22 +2,22 @@ classdef FEM
     %FEM Summary of this class goes here
     %   Detailed explanation goes here
     
+    %% Properties
     properties
-        Property1
+        data
     end
     
+    
+    %% Methods
     methods
-        function obj = FEM(inputArg1,inputArg2)
+        
+        %% Constructor
+        function obj = FEM()
             %FEM Construct an instance of this class
             %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
+            
         end
         
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
-        end
     end
 end
 

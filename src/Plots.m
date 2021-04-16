@@ -9,8 +9,8 @@ classdef Plots < handle
     
     %% Formatting options
     properties (Constant, GetAccess = protected)
-        FontSize = 18;
-        FontSizeLegend = 16;
+        FontSize = 16;
+        FontSizeLegend = 14;
         FontName = "Cambria Math";
         MarkerSize = 15;
         default_pos = [.1 0.1 .8 .8];
@@ -32,7 +32,7 @@ classdef Plots < handle
         
         SinglePlot(this, data, name)
         MultiTabPlot(this, k)
-        SetPlotLabels(this, xlabels, ylabels)
+%         SetPlotLabels(this, xlabels, ylabels)
     end
     
     
@@ -46,5 +46,14 @@ classdef Plots < handle
         end
         
     end
+    
+    
+%     methods (Static)
+%         
+%         function 
+%         end
+%         
+%         
+%     end
 end
 
