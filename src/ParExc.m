@@ -1,52 +1,18 @@
 %% Main file
-clear; clc; close all;
+clc; close all;
 
 
 %% Set general options
-gOpt = GeneralOptions(0,0,1,1);
+[gOpt, shpFun, rom, fem] = SetModel();
 
 
-%% Set lot options
-%%% such as which data to plot and save
-
+%% Solve EDOs, evaluate displacements and modal response, and plot results
+%%% TODO - desmembrar cálculos e plots -> vide 'PlotResults.m'
+[rom, fem] = AnalyzeROMs(rom, fem, shpFun);
 
 
 %% Manage Finite Element Model (Giraffe) data
 
 
-
-
-
-%% Manage Reduced Order Model (ROM) data
-
-
-
-
-
-
-
-
-
-
-
-% fh= figure;
-% utb = uitabgroup(fh);
-% for ii = 1:2
-% f = uitab(utb,'Title',sprintf('Tab %d',ii));
-% subplot(221)
-% plot(rand(1,10))
-% hold on;
-% plot(rand(1,10))
-% hold off; % necessary 
-% subplot(222)
-% plot(rand(1,10))
-% hold on;
-% plot(rand(1,10))
-% hold off;% necessary 
-% subplot(223)
-% plot(rand(1,10))
-% subplot(224)
-% plot(rand(1,10))
-% copyobj(fh.Children(2:end),f) %Copy subplots from figure to tab
-% end
-%  delete(fh.Children(2:end)) % delete subplots from figure
+%% Show results
+PlotResults(rom, shpFun);

@@ -165,7 +165,7 @@ for n=n0:dn:nf
     % Vetor tempo
     t = ti:dt:tf;
     % Resolve sistema de equações
-    f = @(t,x) Integrator(t,x,a,b,g,d,ep,n,mor,modo1,modo2,modo3);
+    f = @(t,x) Integrator_old(t,x,a,b,g,d,ep,n,mor,modo1,modo2,modo3);
     [t_sol,x_sol] = ode45(f,t,x0);
     
     %%% Gráficos
@@ -190,7 +190,7 @@ for n=n0:dn:nf
             
             % Espectros de amplitude do sinal de deslocamentos
             if espectroU == true
-                [vetor_freq,vetor_amp,fd,Ad] = Spectrum(t_sol,U_k);
+                [vetor_freq,vetor_amp,fd,Ad] = Spectrum_old(t_sol,U_k);
             else
                 vetor_freq = []; vetor_amp=[];
             end
@@ -202,11 +202,12 @@ for n=n0:dn:nf
                     FontSize, FontSizeLegend, FontName, pos, loc, lim, [0 6], ...
                     strcat(nomes_figuras(1,k)," - n=",string(n)), espectroU, espFaseU, figFormat)
             end
+            
             %%% Funções modais
             
             % Espectros de amplitude do sinal de deslocamentos
             if espectroA == true
-                [vetor_freq,vetor_amp,fd,Ad] = Spectrum(t_sol,x_sol(:,k));
+                [vetor_freq,vetor_amp,fd,Ad] = Spectrum_old(t_sol,x_sol(:,k));
             else
                 vetor_freq = []; vetor_amp=[];
             end
