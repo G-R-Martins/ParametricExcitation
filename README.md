@@ -11,8 +11,7 @@ This is a simple script that allows evaluating the dynamics of a vertical beam u
 
 - Other tools used in the paper:
   1. `Giraffe` (Generic Interface For Finite Element) - a FEM-solver, also developed at `Universidade de São Paulo` by prof. Alfredo Gay Neto and his research group. For more details see <http://sites.poli.usp.br/p/alfredo.gay/>;
-  2. A preprocessor tool for `Giraffe`, called `GiraffeMoor` - this code generate complete FEM models of mooring systems for Giraffe.
-
-sdasd fasdf gf wrgdasc cs casf asdf asdf df asdf as
- 
+  2. A preprocessor tool for `Giraffe`, called `GiraffeMoor`, which code generates the whole FEM model of mooring systems for Giraffe and set different analyzes.
+  
+  
 
