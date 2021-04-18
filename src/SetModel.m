@@ -7,36 +7,42 @@ function [gOpt,shpFun, rom, fem] = SetModel()
     global beamData
     
     % Object with global options (solution and environment data)
-    gOpt = GeneralOptions(0,0,1,1);
+    gOpt = GeneralOptions(1,1,1,1);
     
     %% Create objects
 %     % Output options
 %     outOpt = {false, false, true, true};
 %     modalOutOpt = {1, 1, 0, 0, 0, 0, 1};
 
+    % Structural damping coefficient
+    c = 0.09;
+    
     % ROM
     rom = {};
     if gOpt.include_ROM_water == true
-        rom{2} = ROM(0.09,true);
-        rom{2}.SetOutputOptions(false, false, true, true);
-        rom{2}.mAmp.SetOutputOptions(1, 1, 0, 0, 0, 0, 1);
+        rom{2} = ROM(c,true);
+        rom{2}.SetOutputOptions(false, false, false, true);
+        rom{2}.genCoord.SetOutputOptions(1, 1, 0, 0, 0, 0, 1);
     end
     if gOpt.include_ROM_air == true
-        rom{1} = ROM(0.09,false);
-        rom{1}.SetOutputOptions(false, false, true, true);
-        rom{1}.mAmp.SetOutputOptions(1, 1, 0, 0, 0, 0, 1);
+        rom{1} = ROM(c,false);
+        rom{1}.SetOutputOptions(false, false, false, true);
+        rom{1}.genCoord.SetOutputOptions(1, 1, 0, 0, 0, 0, 1);
     end
     % FEM
     fem = {};
+    fem_excitationFrequency = 0.86; % TODO - verificar frequência
     if gOpt.include_FEM_water == true
-        fem{2} = FEM(0.09,true);
+        fem{2} = FEM(true,FEM.data_dir, fem_excitationFrequency);
+        fem{2}.SetOutputOptions(false, true);
     end
     if gOpt.include_FEM_air == true
-        fem{1} = FEM(0.09,false);
+        fem{1} = FEM(true,FEM.data_dir, fem_excitationFrequency);
+        fem{1}.SetOutputOptions(false, true);
     end
     
     %% Shape functions
-    shpFun = ShapeFunctions(beamData.L,3,true);
+    shpFun = ShapeFunctions(beamData.L,3,false);
     
     %%% TODO - Retirar dessa função
     if shpFun.print_modes == true

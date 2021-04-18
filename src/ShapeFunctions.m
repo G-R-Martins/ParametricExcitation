@@ -11,7 +11,7 @@ classdef ShapeFunctions < Plots & handle
         % Number of modes
         n_modes (1,1) = 3;
         % Discretization
-        disc (1,1) = 1000;
+        disc (1,1) = 200;
         % Arguments of the shape functions sines
         sin_args
         % Beam nodes

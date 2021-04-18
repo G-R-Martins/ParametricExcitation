@@ -40,9 +40,9 @@ classdef Plots < handle
         
         
         %% Create window to include plots in different tabs
-        function this = OpenTabularPlot(this,tabGroupName)
+        function tab_group = OpenTabularPlot(this,tabGroupName)
             figure('Name',tabGroupName,'units', 'normalized', 'position', this.default_pos, 'color', 'w');
-            uitabgroup;
+            tab_group = uitabgroup;
         end
         
     end

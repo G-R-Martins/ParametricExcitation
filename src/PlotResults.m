@@ -1,39 +1,71 @@
-function [] = PlotResults(rom, shpFun)
+function [] = PlotResults(rom, fem, shpFun, n)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-    global beamData
-    
-    % Window title
-    fig_titles = ["Beam in air" "Imersed beam"];
+global beamData
 
-    for cont_rom = 1:size(rom,2)
+% Window title
+fig_titles = ["Beam in air" "Imersed beam"];
+
+% 1 - air
+% 2 - water
+for cont = 1:2
+    
+    %% Checks exists data
+    if ~isempty(rom{cont}) || ~isempty(fem{cont})
         
-        % Checks if cell is empty 
-        if isempty(rom{cont_rom}) == false    
-            %% Create tabular plot
-            rom{cont_rom}.OpenTabularPlot(fig_titles(cont_rom));
-            
-            %% Displacements
-            for cont = 1:3
-                rom{cont_rom}.MultiTabPlot(cont);
-            end % end for
-            
-            %% Modal responses
-                if rom{cont_rom}.mAmp.out_bools_A.show_A == true
-                    for ii = 1:3
-                        rom{cont_rom}.mAmp.MultiTabPlot(ii, ...
-                            rom{cont_rom}.t_sol, rom{cont_rom}.x_sol);
-                    end
+        %% Create tabular plot
+        if ~isempty(rom{cont})
+            rom{cont}.OpenTabularPlot(strcat(fig_titles(cont),' - n=',num2str(n)));
+        else
+            rom{cont}.OpenTabularPlot(strcat(fig_titles(cont),' - n=',num2str(n)));
+        end
+        
+        %% Displacements
+        
+        % FEM e ROM
+        if ~isempty(rom{cont}) && ~isempty(fem{cont})
+            for cont_disp = 1:3
+                rom{cont}.MultiTabPlot(cont_disp);
+                % Check plot figure blocks (it depends on the presence of the phase space)
+                if rom{cont}.out_bools.phaseSpace == true
+                    n = 3;
+                else
+                    n = 2;
                 end
-            
-            %% Scalogram
-            if rom{cont_rom}.out_bools.scalogram == true
-                rom{cont_rom}.PlotScalogram(shpFun.z/beamData.L, shpFun.modes);
+                fem{cont}.MultiTabPlot(cont_disp, false, n);
+            end
+        % Only ROM data
+        elseif ~isempty(rom{cont})
+            for cont_disp = 1:3
+                rom{cont}.MultiTabPlot(cont_disp);
+            end
+        % Only FEM data
+        else 
+            for cont_disp = 1:3
+                fem{cont}.MultiTabPlot(cont_disp, false, 2);
+            end
+        end % end displacements
+        
+        
+        %% Generalized modal coordinates 
+        if ~isempty(rom{cont})
+            if rom{cont}.genCoord.out_bools_A.show_A == true
+                for ii = 1:3
+                    rom{cont}.genCoord.MultiTabPlot(ii, ...
+                        rom{cont}.t_sol, rom{cont}.x_sol);
+                end
             end
             
-        end % end if
+            %% Scalogram
+            if rom{cont}.out_bools.scalogram == true
+                rom{cont}.PlotScalogram(shpFun.z/beamData.L, shpFun.modes);
+            end
+        end
         
-    end % end ROM's
-end
+    end % end if
+    
+end % end ROM's
+
+end % end function
 
