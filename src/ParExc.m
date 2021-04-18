@@ -1,5 +1,5 @@
 %% Main file
-clc; close all;
+clc; close all;% clear all
 
 
 %% Set general options
@@ -7,12 +7,17 @@ clc; close all;
 
 
 %% Solve EDOs, evaluate displacements and modal response, and plot results
-%%% TODO - desmembrar cálculos e plots -> vide 'PlotResults.m'
-[rom, fem] = AnalyzeROMs(rom, fem, shpFun);
+if ~isempty(rom)
+    rom = Analysis.ROMs(rom, shpFun, 2);
+end
 
 
 %% Manage Finite Element Model (Giraffe) data
+if ~isempty(fem)
+    fem = Analysis.FEMs(fem);
+end
 
 
 %% Show results
-PlotResults(rom, shpFun);
+PlotResults(rom, fem, shpFun, 2);
+

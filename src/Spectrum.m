@@ -1,5 +1,5 @@
 function [freq, Amp, fd, Ad] = Spectrum(t, signal)
-    %%% Header
+    %% Header
     % Inputs  - t -> vector with time discretization
     %           signal -> vector with data signal
     % Outputs - freq -> vector with frequency data
@@ -7,7 +7,7 @@ function [freq, Amp, fd, Ad] = Spectrum(t, signal)
     %         - fd   -> dominant frequency
     %         - Ad   -> amplitude of the dominant frequency
 
-    %%% Function
+    %% Function
     N = length(t);
     deltat = t(2)-t(1);
     fs = 1/deltat;
@@ -17,7 +17,7 @@ function [freq, Amp, fd, Ad] = Spectrum(t, signal)
     Amp = 2*Amp(1:fix(N/2));
     [Ad,index]= max(Amp);
 
-    % Normaliza pela frequência do primeiro modo
+    % Normalize with first mode frequency
     freq = freq(1:fix(N/2))*2*pi;
 
     fd = freq(index);

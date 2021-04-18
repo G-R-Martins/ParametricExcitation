@@ -57,7 +57,7 @@ classdef ROM < Plots & handle
     end
     
     properties
-        mAmp ModalAmp
+        genCoord GenModalCoord
     end
     
     %% Methods
@@ -75,7 +75,7 @@ classdef ROM < Plots & handle
             this.Ampl{3} = {};% amplitude
             
             % Initialize modal amplitude object
-            this.mAmp = ModalAmp();
+            this.genCoord = GenModalCoord();
             
             this.c = c;
             this.isImmersed = bool_immersed;
@@ -218,8 +218,8 @@ classdef ROM < Plots & handle
                 % Displacement time series
                 subplot(2,2,2)
                 hold on; box on;
-                xlabel('\tau = t\omega_1','FontName',this.FontName,'fontsize',this.FontSize)
-                ylabel(this.labels.u(k),'FontName',this.FontName,'fontsize',this.FontSize)
+                xlabel('\tau = t\omega_1','FontName',this.FontName,'FontSize',this.FontSize)
+                ylabel(this.labels.u(k),'FontName',this.FontName,'FontSize',this.FontSize)
                 set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime)
                 
                 plot(this.t_sol, this.U{k}, this.lines(1,1))
@@ -228,9 +228,9 @@ classdef ROM < Plots & handle
                 % Frequency spectrum
                 subplot(2,2,4)
                 hold on; box on;
-                xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-                ylabel("Amplitude", 'FontName', this.FontName, 'fontsize', this.FontSize)
-                set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
+                xlabel('f/f_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
+                ylabel("Amplitude", 'FontName', this.FontName, 'FontSize', this.FontSize)
+                set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', this.lim_plot_freq)
                 
                 plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1))
                 
@@ -244,9 +244,9 @@ classdef ROM < Plots & handle
                 
                 subplot(2,2,[1 3])
                 hold on; box on;
-                xlabel(this.labels.u(k), 'FontName', this.FontName, 'fontsize', this.FontSize)
-                ylabel(this.labels.du(k), 'FontName', this.FontName, 'fontsize', this.FontSize)
-                set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize)
+                xlabel(this.labels.u(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
+                ylabel(this.labels.du(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
+                set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize)
                 
                 plot(this.U{k}(begin:finish,1), this.V{k}(begin:finish,1), this.lines(1,1));
                 
@@ -254,9 +254,9 @@ classdef ROM < Plots & handle
                  % Displacement time series
                  subplot(2,1,1)
                  hold on; box on;
-                 xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'fontsize', this.FontSize);
-                 ylabel(this.labels.u(k),'FontName', this.FontName, 'fontsize', this.FontSize);
-                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime);
+                 xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'FontSize', this.FontSize);
+                 ylabel(this.labels.u(k),'FontName', this.FontName, 'FontSize', this.FontSize);
+                 set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime);
                  
                  plot(this.t_sol, this.U{k}, this.lines(1,1));
                  
@@ -264,9 +264,9 @@ classdef ROM < Plots & handle
                  % Frequency spectrum
                  subplot(2,1,2)
                  hold on; box on;
-                 xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-                 ylabel('Amplitude', 'FontName', this.FontName, 'fontsize', this.FontSize)
-                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
+                 xlabel('f/f_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
+                 ylabel('Amplitude', 'FontName', this.FontName, 'FontSize', this.FontSize)
+                 set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', this.lim_plot_freq)
                  
                  plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1))
             end
@@ -309,9 +309,9 @@ classdef ROM < Plots & handle
             cb.Label.FontName = this.FontName;
             
             % Legends
-            xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-            ylabel('z/L', 'FontName', this.FontName, 'fontsize', this.FontSize)
-            set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize)
+            xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
+            ylabel('z/L', 'FontName', this.FontName, 'FontSize', this.FontSize)
+            set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize)
             
         end
         

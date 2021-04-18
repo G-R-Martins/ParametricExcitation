@@ -43,11 +43,7 @@ classdef GeneralOptions
         end
         
        
-        % Get/set methods.
-%         
-%         function envObj = get.Env( this )
-%             envObj = this.Env;
-%         end %         
+        % Get/set methods
         
     end
 end

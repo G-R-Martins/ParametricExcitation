@@ -1,4 +1,4 @@
-classdef ModalAmp < Plots & handle
+classdef GenModalCoord < Plots & handle
     %% Modal amplitude 
     %   Detailed explanation goes here
     
@@ -24,7 +24,7 @@ classdef ModalAmp < Plots & handle
             'dA',["A_1'(\tau) / D" "A_2'(\tau) / D" "A_3'(\tau) / D"]);
        
         % Tab titles
-        titles = ["A_1" "A_2" "A_3"];
+        titles = ["A1" "A2" "A3"];
     end
     
     
@@ -40,7 +40,7 @@ classdef ModalAmp < Plots & handle
     methods
         
         % 
-        function this = ModalAmp(bool_saveA, bool_saveAk)
+        function this = GenModalCoord(bool_saveA, bool_saveAk)
             if nargin == 2
                 % Initialize empty cells
                 this.freq_A_k{3} = {};
