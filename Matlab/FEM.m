@@ -13,7 +13,7 @@ classdef FEM < Plots & handle
         
         % Results
         U  cell   % displacement
-        dU (:,3) double % TODO - mudar para 'cell' e colocar input do Giraffe
+        dU cell % TODO - mudar para 'cell' e colocar input do Giraffe
         
          % Spectrum
         Freq  cell    % frequency
@@ -53,16 +53,24 @@ classdef FEM < Plots & handle
             %FEM Construct an instance of this class
             
             global beamData
-            this.isImmersed = bool_immersed;
             this.f = f;
+            this.isImmersed = bool_immersed;
+            
+            if bool_immersed == true
+                file = strcat(data_file,'water\');
+            else
+                file = strcat(data_file,'air\');
+            end
             
             % Read data
             for cont = 1:3
-                inpt = readtable(strcat(data_file,'monitor_node_',num2str(this.monitors(cont))),'HeaderLines',1);
+                inpt = readtable(strcat(file,'monitor_node_',...
+                    num2str(this.monitors(cont))),'HeaderLines',1);
                 
                 % Creates arrays with data from the table
-                this.time = table2array(inpt(:,1))*2*pi*this.f+5402;
-                this.U{cont} = table2array(inpt(:,2)) / beamData.d; % match ROM nondimensional
+                this.time = table2array(inpt(:,1))*2*pi*this.f+5400;
+                this.U{cont} = table2array(inpt(:,3)) / beamData.d; % match ROM nondimensional
+                this.dU{cont} = table2array(inpt(:,21)) / (beamData.d* 2*pi*this.f);%/ beamData.d;% * (2*pi*this.f);% * 2*pi*this.f%+5402; % match ROM nondimensional
             end
         end
         
@@ -83,7 +91,7 @@ classdef FEM < Plots & handle
         
         % Calculate frequency spectrum
         function this = CalculateSpectrum(this,k)
-            [this.Freq{k}, this.Ampl{k}, this.Fd(k), this.Ad(k)] = Spectrum(this.time, this.U{k});
+            [this.Freq{k}, this.Ampl{k}, this.Fd(k), this.Ad(k)] = Spectrum(this.time(1549:9950,1), this.U{k}(1549:9950));
         end
         
         
@@ -119,7 +127,25 @@ classdef FEM < Plots & handle
             ylabel("Amplitude", 'FontName', this.FontName, 'fontsize', this.FontSize)
             set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
             
-            plot(this.Freq{k}, this.Ampl{k}, this.lines(1,2))
+            plot(this.Freq{k}, this.Ampl{k}, this.dots(2));%this.lines(1,2))
+            
+            
+            
+            % Phase space
+            %%% Para plotar o espaço de fase do intervalo de interesse, deve-se extrair
+            %%% os valores desse intervalo antes
+            [lin,~] = find(this.time(:,1) >= GeneralOptions.SolOpt.permaTime(1) ...
+                & this.time(:,1) <= GeneralOptions.SolOpt.permaTime(2));
+            begin = lin(1);
+            finish = lin(size(lin,1));
+            
+            subplot(2,2,[1 3])
+            hold on; box on;
+            xlabel(this.labels.u(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
+            ylabel(this.labels.du(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
+            set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize)
+            
+            plot(this.U{k}(begin:finish,1), this.dU{k}(begin:finish,1), this.dots(2));
             
         end
         
