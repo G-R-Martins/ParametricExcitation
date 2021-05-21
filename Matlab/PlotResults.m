@@ -24,16 +24,16 @@ for cont = 1:2
         %% Displacements
         
         % FEM e ROM
-        if ~isempty(rom{cont}) && ~isempty(fem{cont})
+        if ~isempty(rom) && ~isempty(fem)
             for cont_disp = 1:3
                 rom{cont}.MultiTabPlot(cont_disp);
                 % Check plot figure blocks (it depends on the presence of the phase space)
                 if rom{cont}.out_bools.phaseSpace == true
-                    n = 3;
+                    n_plots = 3;
                 else
-                    n = 2;
+                    n_plots = 2;
                 end
-                fem{cont}.MultiTabPlot(cont_disp, false, n);
+                fem{cont}.MultiTabPlot(cont_disp, false, n_plots);
             end
         % Only ROM data
         elseif ~isempty(rom{cont})
