@@ -28,7 +28,20 @@ classdef FEM < Plots & handle
         out_bools 
         
         % Frequency of the prescribed displacement
-        f (1,1) double;
+        f (1,1) double
+        
+        % First row with data to consider as permanent regime
+        permaRegInit (1,1) double
+        
+        % Range to plot time series
+        plot_range double
+        
+        % Tension top/bottom nodes
+        Tension_top double
+        Tension_bottom double
+        
+        % Directory with monitors data
+        dir
     end
     
     
@@ -38,10 +51,13 @@ classdef FEM < Plots & handle
             'du',["u'(L/4,\tau)/D" "u'(L/2,\tau)/D" "u'(3L/4,\tau)/D"])
         
         % Directory of the Giraffe monitors
-        data_dir = "..\GiraffeData\"
+        data_dir = "..\Data\GiraffeData\"
         
-        % Giraffe monitor numbers => [L/4  L/2  3L/4 L]
-        monitors = [11 21 31 41]
+        % Giraffe monitor nodes ID => [L/4  L/2  3L/4 L]
+        nodes = [11 21 31 41]
+        
+        % Giraffe monitor elements ID => [bottom top]
+        elements = [1 20]
     end
     
     
@@ -49,54 +65,65 @@ classdef FEM < Plots & handle
     methods
         
         %% Constructor
-        function this = FEM(bool_immersed,data_file, f)
-            %FEM Construct an instance of this class
+        function this = FEM(bool_immersed, files_dir, f)
             
             global beamData
             this.f = f;
             this.isImmersed = bool_immersed;
             
-            if bool_immersed == true
-                file = strcat(data_file,'water\');
-            else
-                file = strcat(data_file,'air\');
-            end
+            this.dir = files_dir;
+            
+            %-- Giraffe delay
+            delay = 4; % seconds
             
             % Read data
             for cont = 1:3
-                inpt = readtable(strcat(file,'monitor_node_',...
-                    num2str(this.monitors(cont))),'HeaderLines',1);
+                inpt = readtable(strcat(this.dir,'monitor_node_',...
+                    num2str(this.nodes(cont))),'HeaderLines',1);
                 
-                % Creates arrays with data from the table
-                this.time = table2array(inpt(:,1))*2*pi*this.f+5400;
-                this.U{cont} = table2array(inpt(:,3)) / beamData.d; % match ROM nondimensional
-                this.dU{cont} = table2array(inpt(:,21)) / (beamData.d* 2*pi*this.f);%/ beamData.d;% * (2*pi*this.f);% * 2*pi*this.f%+5402; % match ROM nondimensional
+                % Initial delay to match Giraffe and ROM time
+                if cont == 1
+                    this.time = (table2array(inpt(:,1))-delay)*(2*pi*this.f);
+                    [lin,~] = find(this.time(:,1) >= ...
+                        GeneralOptions.SolOpt.permaTime(1));
+                    
+                    this.permaRegInit = lin(1);
+                    this.time(1:lin(1)-1, :) = [];
+                    
+                    [id,~] = find(this.time(:,1) >= ...
+                        GeneralOptions.SolOpt.permaPlot(1) & ...
+                        this.time(:,1) <= GeneralOptions.SolOpt.permaPlot(2));
+                    
+                    this.plot_range = [id(1), id(size(id,1))];
+                else
+                    this.time = (table2array(inpt(this.permaRegInit:size(inpt,1),1))...
+                        -delay)*(2*pi*this.f);
+                end
+                
+                
+                % Creates arrays with data from the table - match ROM nondimensional
+                this.U{cont} = table2array(inpt(this.permaRegInit:size(inpt,1),3)) / beamData.d;
+                this.dU{cont} = table2array(inpt(this.permaRegInit:size(inpt,1),21)) / (beamData.d* 2*pi*this.f);
+                
             end
         end
         
         
-        %% Functions
+        %%=== Functions ===%%
         
-        % Setting plot/save options
-        function this = SetOutputOptions(this, save_fig, ~)
+        %% Setting plot/save options
+        function this = SetOutputOptions(this, save_disp, save_tension)
             % Saving options
-            this.out_bools.save_fig = save_fig;
-            %             this.out_bools.save_scalogram = save_scalogram;
+            this.out_bools.save_disp = save_disp;
+            this.out_bools.save_tension = save_tension;
             
             % Plot options
             this.out_bools.phaseSpace = false;
-%             this.out_bools.scalogram = show_scalogram;
         end
         
         
-        % Calculate frequency spectrum
-        function this = CalculateSpectrum(this,k)
-            [this.Freq{k}, this.Ampl{k}, this.Fd(k), this.Ad(k)] = Spectrum(this.time(1549:9950,1), this.U{k}(1549:9950));
-        end
-        
-        
-        % Plot in multiple tabs
-        function this = MultiTabPlot(this, k, bool_open_tab, nPlots)
+        %% Plot data in multiple tabs
+        function this = PlotResults(this, k, bool_open_tab, nPlots)
             % Open new tab
             if bool_open_tab == true
                 thistab = uitab('Title',this.titles(k),'BackgroundColor', 'w'); % build iith tab
@@ -104,60 +131,65 @@ classdef FEM < Plots & handle
             end
             
             % Displacement time series
-            if nPlots == 3
-                subplot(2,2,2)
-            else
-                subplot(2,1,1)
+            if nPlots == 3; subplot(2,2,2)
+            else;           subplot(2,1,1)
             end
+            
             hold on; box on;
             xlabel('\tau = t\omega_1','FontName',this.FontName,'FontSize',this.FontSize)
             ylabel(this.labels.u(k),'FontName',this.FontName,'FontSize',this.FontSize)
-            set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime)
+            set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
             
-            plot(this.time, this.U{k}, this.dots(2))
+            plot(this.time, this.U{k}, this.dots(1,2))
             
             % Frequency spectrum
-            if nPlots == 3
-                subplot(2,2,4)
-            else
-                subplot(2,1,2)
+            if nPlots == 3; subplot(2,2,4)
+            else;           subplot(2,1,2)
             end
+            
             hold on; box on;
             xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
             ylabel("Amplitude", 'FontName', this.FontName, 'fontsize', this.FontSize)
             set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
             
-            plot(this.Freq{k}, this.Ampl{k}, this.dots(2));%this.lines(1,2))
-            
+            plot(this.Freq{k}, this.Ampl{k}, this.dots(1,2));
             
             
             % Phase space
-            %%% Para plotar o espaço de fase do intervalo de interesse, deve-se extrair
-            %%% os valores desse intervalo antes
-            [lin,~] = find(this.time(:,1) >= GeneralOptions.SolOpt.permaTime(1) ...
-                & this.time(:,1) <= GeneralOptions.SolOpt.permaTime(2));
-            begin = lin(1);
-            finish = lin(size(lin,1));
-            
             subplot(2,2,[1 3])
             hold on; box on;
             xlabel(this.labels.u(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
             ylabel(this.labels.du(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
             set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize)
             
-            plot(this.U{k}(begin:finish,1), this.dU{k}(begin:finish,1), this.dots(2));
+            plot(this.U{k}(this.plot_range(1):this.plot_range(2),1), ...
+                this.dU{k}(this.plot_range(1):this.plot_range(2),1), ...
+                this.dots(1,2));
             
         end
         
         
-        
-        %%% TODO
-        function this = SinglePlot(this, data, ~)
-            if isempty(data)
-                error('FEM object is supposed to use MultiTabPlot with contains no data to plot');
-            end
+        %% Set tensions
+        function this = SetTensions(this)
+            % Bottom
+            inpt = readtable(strcat(this.dir,'monitor_element_',...
+                num2str(this.elements(1)) ), 'HeaderLines',1);
+            this.Tension_bottom = ...
+                table2array(inpt(this.permaRegInit:size(inpt,1),4));
+            % Top 
+            inpt = readtable(strcat(this.dir,'monitor_element_',...
+                num2str(this.elements(2)) ), 'HeaderLines',1);
+            this.Tension_top = ...
+                table2array(inpt(this.permaRegInit:size(inpt,1),4));
         end
         
+        %% Print bottom/top tensions
+        function this = PlotTensions(this)
+            plot(this.time/(2*pi*this.f), this.Tension_top, this.lines(3,1));
+            plot(this.time/(2*pi*this.f), this.Tension_bottom, this.lines(3,2));
+        end
+        
+                
     end
 end
 
