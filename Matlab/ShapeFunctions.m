@@ -78,8 +78,8 @@ classdef ShapeFunctions < Plots & handle
         
         
         % Not allowed for ShapeFunctions
-        function [] = MultiTabPlot(~)
-            error('Shapae function object can not use ''MultTabPlot'' function. It is only allowed to plot shape functions in a single figure. \n Please, use ''SinglePlot'' function');
+        function [] = PlotResults(~)
+            error('Shape function object can not use ''MultTabPlot'' function. It is only allowed to plot shape functions in a single figure. \n Please, use ''SinglePlot'' function');
         end
                 
     end

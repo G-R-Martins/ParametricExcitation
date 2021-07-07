@@ -54,25 +54,25 @@ classdef GenModalCoord < Plots & handle
         
         
         % 
-        function this = SetOutputOptions(this, show_A, show_max_Ak, show_Ampl, save_A, save_Ak, save_Ampl, include_phaseSpace)
-                   
-            % Plot options
-            this.out_bools_A = struct('show_A', show_A, 'show_max_Ak', show_max_Ak, 'show_Ampl', show_Ampl,...
-                'save_A', save_A, 'save_Ak', save_Ak, 'save_Ampl', save_Ampl, 'include_phaseSpace', include_phaseSpace);
+        function this = SetOutputOptions(this, show_A, show_max_Ak, ...
+                show_Ampl, save_A, save_Ak, save_Ampl, show_phSpace)
+            
+            % Plot options 
+            this.out_bools_A = struct('show_A', show_A, ...
+                'show_max_Ak', show_max_Ak, 'show_Ampl', show_Ampl, ...
+                'save_A', save_A, 'save_Ak', save_Ak, ...
+                'save_Ampl', save_Ampl, 'include_phaseSpace',show_phSpace);
         end
+              
         
-        
-        % Calculate frequency spectrum
-        function this = CalculateSpectrum(this, time, result, k)
-            [this.freq_A_k{k}, this.ampl_A_k{k}, this.Fd_A_k(k), this.Ad_A_k(k)] = Spectrum(time, result);
-        end
-      
-        
-        % 
-        function this = MultiTabPlot(this, k, t_sol, x_sol)
+        %% Plot general results
+        function this = PlotResults(this, k, open_tab, t_sol, x_sol)
+            
             % Open new tab
-            thistab = uitab('Title',this.titles(k),'BackgroundColor', 'w'); % build iith tab
-            axes('Parent',thistab); % somewhere to plot
+            if open_tab == true
+                thistab = uitab('Title',this.titles(k),'BackgroundColor', 'w'); % build iith tab
+                axes('Parent',thistab); % somewhere to plot
+            end
             
             if this.out_bools_A.include_phaseSpace == true
                 % Displacement time series
@@ -80,7 +80,7 @@ classdef GenModalCoord < Plots & handle
                 hold on; box on;
                 xlabel('\tau = t\omega_1','FontName',this.FontName,'fontsize',this.FontSize)
                 ylabel(this.labels.A(k),'FontName',this.FontName,'fontsize',this.FontSize)
-                set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime)
+                set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
                 
                 plot(t_sol, x_sol(:,k), this.lines(1,1))
                 
@@ -95,28 +95,21 @@ classdef GenModalCoord < Plots & handle
                 plot(this.freq_A_k{k}, this.ampl_A_k{k}, this.lines(1,1))
                 
                 % Phase space
-                %%% Para plotar o espaço de fase do intervalo de interesse, deve-se extrair
-                %%% os valores desse intervalo antes
-                [lin,~] = find(t_sol(:,1) >= GeneralOptions.SolOpt.permaTime(1) ...
-                    & t_sol(:,1) <= GeneralOptions.SolOpt.permaTime(2));
-                begin = lin(1);
-                finish = lin(size(lin,1));
-                
                 subplot(2,2,[1 3])
                 hold on; box on;
                 xlabel(this.labels.A(k), 'FontName', this.FontName, 'fontsize', this.FontSize)
                 ylabel(this.labels.dA(k), 'FontName', this.FontName, 'fontsize', this.FontSize)
                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize)
                 
-                plot(x_sol(begin:finish,k), x_sol(begin:finish,k+3), this.lines(1,1));
+                plot(x_sol(:,k), x_sol(:,k+3), this.lines(1,1));
                 
-             else
+            else %-- not include phase space
                  % Displacement time series
                  subplot(2,1,1)
                  hold on; box on;
                  xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'fontsize', this.FontSize);
                  ylabel(this.labels.A,'FontName', this.FontName, 'fontsize', this.FontSize);
-                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaTime);
+                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot);
                  
                  plot(t_sol, x_sol(:,k), this.lines(1,1));
                  
