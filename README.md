@@ -54,8 +54,8 @@ if gOpt.include_ROM_water
     0, ... save displacement time series
     1, ... save scalogram (this option MUST BE TRUE OR 1)
     0, ... save tension 
-    0, ... save show phaseSpace
-    1  ... save show scalogram
+    0, ... show phaseSpace
+    1  ... show scalogram
     );
     ... block of code
 end
