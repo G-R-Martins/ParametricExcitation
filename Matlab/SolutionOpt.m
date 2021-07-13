@@ -11,14 +11,14 @@ classdef SolutionOpt < handle
         % Time 
         ti = 0;
         dt = 0.02;
-        tf = 5050;
-        permaTime = [1000 5050];      % permanent regime
-        permaPlot = [5000 5050];    % plot range
+        tf = 6000;
+        permaTime = [1000 5020];      % permanent regime
+        permaPlot = [5000 5020];    % plot range
         
         % Non-dimensional frequency - 'n'
         n0 = 2
         dn = 2  % MUST BE POSITIVE (DEFAULT: 2)
-        nf = 6
+        nf = 4
     end
     
     %% Methods

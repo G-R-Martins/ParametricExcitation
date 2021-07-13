@@ -10,6 +10,11 @@ classdef FEM < Plots & handle
         
         % Time series readed from file
         time (:,1) double
+        timestep (1,1) double
+        delay (1,1) double
+        
+        % Snapshots sample
+        sample (1,1) double
         
         % Results
         U  cell   % displacement
@@ -40,6 +45,10 @@ classdef FEM < Plots & handle
         Tension_top double
         Tension_bottom double
         
+        % Scalogram data
+        scalogram
+        
+        
         % Directory with monitors data
         dir
     end
@@ -58,6 +67,7 @@ classdef FEM < Plots & handle
         
         % Giraffe monitor elements ID => [bottom top]
         elements = [1 20]
+        
     end
     
     
@@ -65,7 +75,7 @@ classdef FEM < Plots & handle
     methods
         
         %% Constructor
-        function this = FEM(bool_immersed, files_dir, f)
+        function this = FEM(bool_immersed, files_dir, f, timestep, sample)
             
             global beamData
             this.f = f;
@@ -74,7 +84,11 @@ classdef FEM < Plots & handle
             this.dir = files_dir;
             
             %-- Giraffe delay
-            delay = 4; % seconds
+            this.delay = 4; % seconds
+            
+            %-- Giraffe timestep
+            this.timestep = timestep;
+            this.sample = sample;
             
             % Read data
             for cont = 1:3
@@ -83,7 +97,7 @@ classdef FEM < Plots & handle
                 
                 % Initial delay to match Giraffe and ROM time
                 if cont == 1
-                    this.time = (table2array(inpt(:,1))-delay)*(2*pi*this.f);
+                    this.time = (table2array(inpt(:,1))-this.delay)*(2*pi*this.f);
                     [lin,~] = find(this.time(:,1) >= ...
                         GeneralOptions.SolOpt.permaTime(1));
                     
@@ -97,7 +111,7 @@ classdef FEM < Plots & handle
                     this.plot_range = [id(1), id(size(id,1))];
                 else
                     this.time = (table2array(inpt(this.permaRegInit:size(inpt,1),1))...
-                        -delay)*(2*pi*this.f);
+                        -this.delay)*(2*pi*this.f);
                 end
                 
                 
@@ -112,13 +126,16 @@ classdef FEM < Plots & handle
         %%=== Functions ===%%
         
         %% Setting plot/save options
-        function this = SetOutputOptions(this, save_disp, save_tension)
+        function this = SetOutputOptions(this, save_disp, save_tension, ...
+                save_scalogram , plot_scalogram)
             % Saving options
             this.out_bools.save_disp = save_disp;
             this.out_bools.save_tension = save_tension;
+            this.out_bools.save_scalogram = save_scalogram ;
             
             % Plot options
             this.out_bools.phaseSpace = false;
+            this.out_bools.plot_scalogram = plot_scalogram;
         end
         
         
@@ -140,7 +157,7 @@ classdef FEM < Plots & handle
             ylabel(this.labels.u(k),'FontName',this.FontName,'FontSize',this.FontSize)
             set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
             
-            plot(this.time, this.U{k}, this.dots(1,2))
+            plot(this.time, this.U{k}, this.markers(2+2*this.isImmersed))
             
             % Frequency spectrum
             if nPlots == 3; subplot(2,2,4)
@@ -149,10 +166,10 @@ classdef FEM < Plots & handle
             
             hold on; box on;
             xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-            ylabel("Amplitude", 'FontName', this.FontName, 'fontsize', this.FontSize)
+            ylabel("S_û(f)", 'FontName', this.FontName, 'fontsize', this.FontSize)
             set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
             
-            plot(this.Freq{k}, this.Ampl{k}, this.dots(1,2));
+            plot(this.Freq{k}, this.Ampl{k}, this.markers(2+2*this.isImmersed));
             
             
             % Phase space
@@ -164,7 +181,7 @@ classdef FEM < Plots & handle
             
             plot(this.U{k}(this.plot_range(1):this.plot_range(2),1), ...
                 this.dU{k}(this.plot_range(1):this.plot_range(2),1), ...
-                this.dots(1,2));
+                this.markers(2+2*this.isImmersed));
             
         end
         
@@ -181,14 +198,112 @@ classdef FEM < Plots & handle
                 num2str(this.elements(2)) ), 'HeaderLines',1);
             this.Tension_top = ...
                 table2array(inpt(this.permaRegInit:size(inpt,1),4));
+%             % Bottom
+%             inpt = readtable(strcat(this.dir,'monitor_node_1'),...
+%                 'HeaderLines',1);
+%             this.Tension_bottom = ...
+%                 table2array(inpt(this.permaRegInit:size(inpt,1),10));
+%             % Top 
+%             inpt = readtable(strcat(this.dir,'monitor_node_42'),...
+%                 'HeaderLines',1);
+%             this.Tension_top = ...
+%                 table2array(inpt(this.permaRegInit:size(inpt,1),10));
         end
         
         %% Print bottom/top tensions
         function this = PlotTensions(this)
-            plot(this.time/(2*pi*this.f), this.Tension_top, this.lines(3,1));
-            plot(this.time/(2*pi*this.f), this.Tension_bottom, this.lines(3,2));
+            plot(this.time/(2*pi*this.f), this.Tension_top, ...
+                this.lines(3,1+2*this.isImmersed));
+            plot(this.time/(2*pi*this.f), this.Tension_bottom, ...
+                this.lines(3,2+2*this.isImmersed));
         end
         
+        
+        function this = SetScalogram(this)
+            global beamData
+            
+            % Range to plot scalogram
+            this.scalogram.dTau = GeneralOptions.SolOpt.permaPlot(2) - ...
+                GeneralOptions.SolOpt.permaPlot(1);
+            
+            % Time step
+            this.timestep = this.time(2) - this.time(1); %nondimensional
+            
+            % range to plot
+            %try to get a simmetric range equivalent to 5*plot_range
+            
+            %-- end time (nondimensional) -> ensure that a valid data is plotted
+            this.scalogram.plotFinish = min([this.time(this.plot_range(2)) + ...
+                this.timestep + 2*this.scalogram.dTau, SolutionOpt.tf]);
+            this.scalogram.plotBegin = this.time(this.plot_range(1)) - this.timestep ...
+                - 2*this.scalogram.dTau;
+            
+            %-- Min/Max solution snapshot (post)
+            this.scalogram.begin = floor(...
+                ( (this.scalogram.plotBegin/(2*pi*this.f)) ...
+                - this.delay ) / (this.timestep/(2*pi*this.f)*this.sample)...
+                );
+            this.scalogram.finish = ceil(...
+                ( (this.scalogram.plotFinish/(2*pi*this.f)) ...
+                - this.delay ) / (this.timestep/(2*pi*this.f)*this.sample)...
+                );
+            
+            this.scalogram.data = zeros(this.nodes(size(this.nodes,2)),...
+                this.scalogram.finish-this.scalogram.begin+1);
+
+            % Matrix with time series data
+            % id offset
+            offset = this.scalogram.begin - 1;
+            for id = this.scalogram.begin:this.scalogram.finish
+                this.scalogram.data(:,id-offset) = readmatrix(strcat(this.dir,...
+                    'scalogram\solution_5_configuration_',num2str(id)),...
+                    'Range','F3:F43') / beamData.d;
+            end
+        end
+        
+        
+        function this = PlotScalogram(this, open_tab)
+            
+            % Open new tab
+            if open_tab == true
+                if this.isImmersed; tabName = 'Scalogram-fem-water';
+                else;               tabName = 'Scalogram-fem-air';  end
+                
+                thistab = uitab('Title', tabName, 'BackgroundColor','w');
+                axes('Parent',thistab); % somewhere to plot
+            end
+            
+            % Plot data and change colors
+            pcolor(linspace(...
+                this.scalogram.plotBegin,this.scalogram.plotFinish,...
+                size(this.scalogram.data,2) ),...
+                linspace( 0,1,this.nodes(size(this.nodes,2)) ), ...
+                this.scalogram.data)
+            shading 'Interp'
+            
+            % Color bar plot
+            cb = colorbar;
+            cb.Label.String = 'u(z/L,\tau)/D';
+            cb.Label.FontSize = this.FontSize;
+            cb.Label.FontName = this.FontName;
+            
+            colormap jet
+            
+            % Legends
+            xlabel('\tau = t\omega_1', 'FontName', this.FontName, ...
+                'FontSize', this.FontSize)
+            ylabel('z/L', 'FontName', this.FontName, ...
+                'FontSize', this.FontSize)
+            
+%             % Adapt range to match a possible ROM scalogram 
+%             %in practice, just exclude 'timestep'
+%             newRange=[this.time(this.plot_range(1))-2*this.scalogram.dTau...
+%                 min([this.time(this.plot_range(2))+2*this.scalogram.dTau,...
+%                 SolutionOpt.tf])];
+            set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize,...
+                'xlim',[4960 5060])
+            
+        end
                 
     end
 end

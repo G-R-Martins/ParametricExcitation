@@ -254,13 +254,15 @@ classdef ROM < Plots & handle
         
         %% Bottom/Top tensions
         function this = PlotTensions(this)
-            plot(this.t_sol, this.Tension_top, this.lines(1,1));
-            plot(this.t_sol, this.Tension_bottom, this.lines(1,2));
+            plot(this.t_sol, this.Tension_top, ...
+                this.lines(3*this.isImmersed,1+2*this.isImmersed));
+            plot(this.t_sol, this.Tension_bottom, ...
+                this.lines(3*this.isImmersed,2+2*this.isImmersed));
         end
         
         
         %% Plot in multiple tabs
-        function this = PlotResults(this, k, open_tab, fig)
+        function this = PlotResults(this, k, open_tab)
             
             % Open new tab
             if open_tab == true
@@ -277,17 +279,17 @@ classdef ROM < Plots & handle
                 ylabel(this.labels.u(k),'FontName',this.FontName,'FontSize',this.FontSize)
                 set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
                 
-                plot(this.t_sol, this.U{k}, this.lines(1,1))
+                plot(this.t_sol, this.U{k},this.lines(1,1+2*this.isImmersed))
                 
                 
                 %-- Frequency spectrum
                 subplot(2,2,4)
                 hold on; box on;
                 xlabel('f/f_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
-                ylabel("Amplitude", 'FontName', this.FontName, 'FontSize', this.FontSize)
+                ylabel("S_û(f)", 'FontName', this.FontName, 'FontSize', this.FontSize)
                 set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', this.lim_plot_freq)
                 
-                plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1))
+                plot(this.Freq{k}, this.Ampl{k},this.lines(1,1+2*this.isImmersed))
                 
                 %-- Phase space
                 subplot(2,2,[1 3])
@@ -298,7 +300,7 @@ classdef ROM < Plots & handle
                 
                 plot(this.U{k}(this.plot_range(1):this.plot_range(2),1),...
                     this.V{k}(this.plot_range(1):this.plot_range(2),1),...
-                    this.lines(1,1));
+                    this.lines(1,1+2*this.isImmersed));
                 
              else
                  %-- Displacement time series
@@ -308,17 +310,17 @@ classdef ROM < Plots & handle
                  ylabel(this.labels.u(k),'FontName', this.FontName, 'FontSize', this.FontSize);
                  set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot);
                  
-                 plot(this.t_sol, this.U{k}, this.lines(1,1));
+                 plot(this.t_sol, this.U{k}, this.lines(1,1+2*this.isImmersed));
                  
                  
                  %-- Frequency spectrum
                  subplot(2,1,2)
                  hold on; box on;
                  xlabel('f/f_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
-                 ylabel('Amplitude', 'FontName', this.FontName, 'FontSize', this.FontSize)
+                 ylabel('S_û(f)', 'FontName', this.FontName, 'FontSize', this.FontSize)
                  set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', this.lim_plot_freq)
                  
-                 plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1))
+                 plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1+2*this.isImmersed))
             end
             
             
@@ -328,16 +330,35 @@ classdef ROM < Plots & handle
         
         %% Plot scalogram
         function this = PlotScalogram(this, open_tab, z_norm, modes)
-            % Matrix with coordinates
-            begin = this.plot_range(1);
-            finish = this.plot_range(2);
+            
+            dTau = (this.t_sol(this.plot_range(2)) - ...
+                this.t_sol(this.plot_range(1)) );
+            
+            % range to plot
+            %try to get a simmetric range equivalent to 10*plot_range
+            
+            %-- end time -> ensure that a valid data is plotted
+            plotFinish = min([...
+                this.t_sol(this.plot_range(2)) + 2*dTau, SolutionOpt.tf]);
+            plotBegin = this.t_sol(this.plot_range(1)) - 2*dTau;
+            
+            %-- Min/Max index
+            [id,~] = find(this.t_sol >= plotBegin & ...
+                this.t_sol <= plotFinish);
+            
+            begin = id(1);
+            finish= id(size(id,1));
+            
             mat = (this.x_sol(begin:finish,1)*modes(1,:)+...
                 this.x_sol(begin:finish,2)*modes(2,:)+...
                 this.x_sol(begin:finish,3)*modes(3,:))';
             
             % Open new tab
             if open_tab == true
-                thistab = uitab('Title','Scalogram','BackgroundColor','w');
+                if this.isImmersed; tabName = 'Scalogram-rom-water';
+                else;               tabName = 'Scalogram-rom-air';  end
+                
+                thistab = uitab('Title',tabName,'BackgroundColor','w');
                 axes('Parent',thistab); % somewhere to plot
             end
             
@@ -351,10 +372,13 @@ classdef ROM < Plots & handle
             cb.Label.FontSize = this.FontSize;
             cb.Label.FontName = this.FontName;
             
+            colormap jet
+            
             % Legends
             xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
             ylabel('z/L', 'FontName', this.FontName, 'FontSize', this.FontSize)
-            set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize)
+            set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize,...
+                'xlim',[4960 5060])
             
         end
         

@@ -7,23 +7,59 @@ classdef Plots < handle
     end
     
     
-    %% Formatting options
+    %% Constants
     properties (Constant, GetAccess = public)
-        FontSize = 16;
-        FontSizeLegend = 14;
+        % Formatting options
+        FontSize = 14;
+        FontSizeLegend = 13;
+        LegLoc = 'NorthWest';
         FontName = "Cambria Math";
-        MarkerSize = 15;
         default_pos = [.1 0.1 .8 .8];
         default_paperSize = [3.5 6];
         figFormat = '-dpng'; % Format to save
+        figRes = '-r1000';	 % resolution
         
-        lines = ["-k" "-r" "-g" "-b"; ...
-            "--k" "--r" "--g" "--b";
-            "-.k" "-.r" "-.g" "-.b"];
-        dots = [".k" ".r" ".g" ".b"];
+        
+        lines = [...
+            struct('LineStyle','-','Color','k','LineWidth',0.5) ...
+            struct('LineStyle','-','Color','r','LineWidth',0.5) ...
+            struct('LineStyle','-','Color',[0.8500 0.3250 0.0980],...
+            'LineWidth',0.8) ...
+            struct('LineStyle','-','Color','b','LineWidth',0.5) ; ...
+            %
+            struct('LineStyle','--','Color','k','LineWidth',0.5) ...
+            struct('LineStyle','--','Color','r','LineWidth',0.5) ...
+            struct('LineStyle','--','Color',[0.8500 0.3250 0.0980],...
+            'LineWidth',0.5) ...
+            struct('LineStyle','--','Color','b','LineWidth',0.5) ; ...
+            %
+            struct('LineStyle','-.','Color','k','LineWidth',0.5) ...
+            struct('LineStyle','-.','Color','r','LineWidth',0.5) ...
+            struct('LineStyle','-.','Color',[0.8500 0.3250 0.0980],...
+            'LineWidth',0.5) ...
+            struct('LineStyle','-.','Color','b','LineWidth',0.5) ...
+            ];
+        markers = [...
+            % 
+            struct('Marker','.','MarkerFaceColor','none',...
+            'MarkerEdgeColor','k','MarkerSize',6,...
+            'LineStyle','none')...
+            %
+            struct('Marker','.','MarkerFaceColor','none',...
+            'MarkerEdgeColor','r','MarkerSize',6,...
+            'LineStyle','none')...
+            %
+            struct('Marker','.','MarkerFaceColor','none',...
+            'MarkerEdgeColor','g','MarkerSize',6,...
+            'LineStyle','none') ...
+            %
+            struct('Marker','o','MarkerFaceColor','none',...
+            'MarkerEdgeColor',[0 0.4470 0.7410],'MarkerSize',3.5,...
+            'LineStyle','none')...
+            ];
 		
-		lim_plot_freq = [0 6];
-        
+        % frequency range
+		lim_plot_freq = [0 7];
     end
     
 
@@ -34,31 +70,37 @@ classdef Plots < handle
     
     
     methods 
-        
-        
-        %% Create window to include plots in different tabs
-        function tab_group = OpenTabularPlot(this,tabGroupName)
-            figure('Name',tabGroupName,'units','normalized','position', ...
-                this.default_pos, 'color', 'w');
-            tab_group = uitabgroup;
-        end
-        
         function fig = OpenSiglePlotFig(this,figTitle)
             fig = figure('Name',figTitle,'units','normalized','position', ...
                 this.default_pos, 'color', 'w');
         end
-        
     end
     
     methods (Static)
-        function [] = OpenFig(figName, xlab, ylab, plot_lim, font, size)
+        
+        
+        
+        %% Create window to include plots in different tabs
+        function tab_group = OpenTabularPlot(tabGroupName)
+            figure('Name',tabGroupName,'units','normalized','position', ...
+                Plots.default_pos, 'color', 'w');
+            tab_group = uitabgroup;
+        end
+        
+        function [] = AddLegend(leg)
+            legend(leg,'FontName', Plots.FontName, ...
+                'FontSize', Plots.FontSizeLegend, 'Location', Plots.LegLoc);
+        end
+        
+        function [] = OpenFig(figName, xlab, ylab, plot_lim)
             figure('Name',figName,'units', ...
                 'normalized', 'position',[.1 .1 .5 .8], 'color','w');
             hold on; box on;
             
-            xlabel(xlab,'FontName',font,'FontSize',size);
-            ylabel(ylab,'FontName',font,'FontSize',size);
-            set(gca, 'FontName',font, 'FontSize',size, 'xlim', plot_lim);
+            xlabel(xlab,'FontName',Plots.FontName,'FontSize',Plots.FontSize);
+            ylabel(ylab,'FontName',Plots.FontName,'FontSize',Plots.FontSize);
+            set(gca, 'FontName',Plots.FontName, ...
+                'FontSize', Plots.FontSize, 'xlim', plot_lim);
         end
         
     end

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     53950,       1191]
-NotebookOptionsPosition[     52635,       1163]
-NotebookOutlinePosition[     53078,       1180]
-CellTagsIndexPosition[     53035,       1177]
+NotebookDataLength[     70976,       1619]
+NotebookOptionsPosition[     69468,       1589]
+NotebookOutlinePosition[     69911,       1606]
+CellTagsIndexPosition[     69868,       1603]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -101,14 +101,11 @@ Cell[BoxData[
    RowBox[{"order", " ", "model", " ", 
     RowBox[{"(", "ROM", ")"}], " ", "of", " ", "a", " ", "parametric", " ", 
     "excitation", " ", 
-    RowBox[{"phenomenon", ".", "\[LineSeparator]", "The"}], " ", "mainly", 
-    " ", "advantage", " ", "is", " ", "to", " ", "use", " ", "the", " ", 
-    "Wolphram", " ", "Mathematica", " ", "powerfull", " ", "symbolic", " ", 
-    "computation", " ", "to", " ", "easily", " ", "identify", " ", "the", " ",
-     "nondimensional", " ", "quantities"}]}], "Text"]], "Text",
+    RowBox[{"phenomenon", "."}]}]}], "Text"]], "Text",
  CellDingbat->"\[DiamondSuit]",
  CellChangeTimes->{{3.8271673367408686`*^9, 3.827167484362531*^9}, 
-   3.82716779375541*^9, 3.8271678506796107`*^9, 3.8305990777028985`*^9},
+   3.82716779375541*^9, 3.8271678506796107`*^9, 3.8305990777028985`*^9, 
+   3.8347594208373737`*^9},
  TextAlignment->Center,
  TextJustification->0.25,
  FontFamily->
@@ -979,29 +976,27 @@ Cell[BoxData[
    3.8271671186868973`*^9, 3.827167128711136*^9}, 3.8271674862992077`*^9, 
    3.8317314606510525`*^9, {3.8344999196721015`*^9, 
    3.834499930734507*^9}},ExpressionUUID->"87c1c2f8-6173-41ba-8ad4-\
-cd4f8ccdcb3b"],
+cd4f8ccdcb3b"]
+}, Open  ]],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"Show", " ", "the", " ", "equations", " ", "of", " ", "motion", " ", 
+   RowBox[{"in", " ", "'"}], "Traditional", " ", 
+   RowBox[{"form", "'"}], " ", "and", " ", 
+   RowBox[{"in", " ", "'"}], "Tex", " ", 
+   RowBox[{"form", "'"}]}], "Text"]], "Text",
+ CellDingbat->"\[DiamondSuit]",
+ CellChangeTimes->{{3.8271673367408686`*^9, 3.827167484362531*^9}, 
+   3.82716779375541*^9, 3.8271678506796107`*^9, 3.8305990777028985`*^9, {
+   3.8347594208373737`*^9, 3.8347594529754677`*^9}},
+ TextAlignment->Center,
+ TextJustification->0.25,
+ FontFamily->
+  "Times New Roman",ExpressionUUID->"37e1924f-7dd2-488a-97a3-d0fe6c10a36a"],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"(*", " ", 
-   RowBox[{
-   "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", 
-    " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ",
-     "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", 
-    "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*",
-     " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", 
-    "\[IndentingNewLine]", " ", "*", "  ", "Show", " ", "the", " ", 
-    "equations", " ", "of", " ", "motion", " ", 
-    RowBox[{"in", " ", "'"}], "Traditional", " ", 
-    RowBox[{"form", "'"}], " ", "and", " ", 
-    RowBox[{"in", " ", "'"}], "Tex", " ", 
-    RowBox[{"form", "'"}], "   ", "*", "\[IndentingNewLine]", " ", "*", " ", 
-    "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*",
-     " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", 
-    " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ",
-     "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", "*", " ", 
-    "*", " ", "*", " ", "*", " ", "*", " ", "*"}], " ", "*)"}], 
-  "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
   RowBox[{"(*", " ", 
    RowBox[{"Output", " ", "formatting"}], " ", "*)"}], "\[IndentingNewLine]", 
   RowBox[{
@@ -1013,16 +1008,6 @@ Cell[BoxData[
         RowBox[{"FontSize", "\[Rule]", "20"}], ",", 
         RowBox[{"FontWeight", "\[Rule]", "Bold"}], ",", 
         RowBox[{"Background", "\[Rule]", "LightBlue"}], ",", 
-        RowBox[{"FontFamily", "\[Rule]", "\"\<Times New Roman\>\""}]}], "]"}],
-       "&"}]}], ";"}], "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"styleTeX", "=", 
-     RowBox[{
-      RowBox[{"Style", "[", 
-       RowBox[{"#", ",", 
-        RowBox[{"FontSize", "\[Rule]", "20"}], ",", 
-        RowBox[{"FontWeight", "\[Rule]", "Bold"}], ",", 
-        RowBox[{"Background", "\[Rule]", "LightRed"}], ",", 
         RowBox[{"FontFamily", "\[Rule]", "\"\<Times New Roman\>\""}]}], "]"}],
        "&"}]}], ";"}], "\[IndentingNewLine]", 
    RowBox[{
@@ -1062,36 +1047,8 @@ Cell[BoxData[
      RowBox[{"styleText", "@", "\"\< - Third equation of motion: \\n\>\""}], 
      ",", " ", 
      RowBox[{"styleEqs", "@", 
-      RowBox[{"TraditionalForm", "[", "eq3", "]"}]}], ",", "\"\<\\n\>\""}], 
-    "\[IndentingNewLine]", "]"}], 
-   RowBox[{"(*", 
-    RowBox[{"End", " ", "print"}], "*)"}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", 
-   RowBox[{"Print", "[", "\"\<\\n\>\"", "]"}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", 
-   RowBox[{"(*", " ", 
-    RowBox[{"TeX", " ", "format"}], " ", "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"Print", "[", 
-    RowBox[{
-     RowBox[{"styleTeX", "@", "\"\<Equations in TeX format: \\n\\n\>\""}], 
-     ",", "\[IndentingNewLine]", 
-     RowBox[{"styleText", "@", "\"\< - First equation of motion: \\n\>\""}], 
-     ",", " ", 
-     RowBox[{"styleEqs", "@", 
-      RowBox[{"TeXForm", "[", "eq1", "]"}]}], ",", "\"\<\\n\\n\>\"", ",", 
-     "\[IndentingNewLine]", 
-     RowBox[{"styleText", "@", "\"\< - Second equation of motion: \\n\>\""}], 
-     ",", 
-     RowBox[{"styleEqs", "@", " ", 
-      RowBox[{"TeXForm", "[", "eq2", "]"}]}], ",", "\"\<\\n\\n\>\"", ",", 
-     "\[IndentingNewLine]", 
-     RowBox[{"styleText", "@", "\"\< - Third equation of motion: \\n\>\""}], 
-     ",", 
-     RowBox[{"styleEqs", "@", " ", 
-      RowBox[{"TeXForm", "[", "eq3", "]"}]}], ",", " ", "\"\<\\n\>\""}], 
-    "\[IndentingNewLine]", "]"}], 
-   RowBox[{"(*", 
-    RowBox[{"End", " ", "print"}], "*)"}], "\[IndentingNewLine]"}]}]], "Input",
+      RowBox[{"TraditionalForm", "[", "eq3", "]"}]}], ",", "\"\<\\n\\n\>\""}],
+     "]"}], "\[IndentingNewLine]", "\[IndentingNewLine]"}]}]], "Input",
  CellGroupingRules->{"GroupTogetherGrouping", 10000.},
  CellChangeTimes->{{3.8148778111164727`*^9, 3.8148778174163113`*^9}, {
    3.814878182420092*^9, 3.8148782849744806`*^9}, {3.8148783389995546`*^9, 
@@ -1156,10 +1113,479 @@ Cell[BoxData[
    3.8271671186868973`*^9, 3.827167128711136*^9}, {3.827167166352894*^9, 
    3.827167217745734*^9}, {3.827168006352643*^9, 3.8271680141120214`*^9}, 
    3.827168045919132*^9, {3.8311159143477793`*^9, 3.8311159172615767`*^9}, {
-   3.8344998839149275`*^9, 
-   3.834499892568098*^9}},ExpressionUUID->"7690ba06-6948-4e78-9aa6-\
-0cbb6b0a71d8"]
-}, Open  ]]
+   3.8344998839149275`*^9, 3.834499892568098*^9}, {3.8347594577907677`*^9, 
+   3.8347595008822756`*^9}, {3.8347667320950184`*^9, 3.834766740911474*^9}},
+ CellLabel->"In[28]:=",ExpressionUUID->"7690ba06-6948-4e78-9aa6-0cbb6b0a71d8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   StyleBox["\<\"Equations of motion: \\n\\n\"\>",
+    StripOnInput->False,
+    FontFamily->"Times New Roman",
+    FontSize->20,
+    FontWeight->Bold,
+    Background->RGBColor[0.87, 0.94, 1]], "\[InvisibleSpace]", 
+   StyleBox["\<\" - First equation of motion: \\n\"\>",
+    StripOnInput->False,
+    FontFamily->"Times New Roman",
+    FontSize->16,
+    FontWeight->Bold], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     FormBox[
+      RowBox[{
+       FractionBox[
+        RowBox[{"c", " ", 
+         RowBox[{
+          SuperscriptBox[
+           SubscriptBox["A", "1"], "\[Prime]",
+           MultilineFunction->None], "(", "t", ")"}]}], 
+        RowBox[{
+         SubscriptBox["\[Omega]", "1"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       RowBox[{
+        RowBox[{
+         SubscriptBox["A", "1"], "(", "t", ")"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          FractionBox[
+           RowBox[{
+            SuperscriptBox["\[Pi]", "4"], " ", 
+            SuperscriptBox["d", "2"], " ", "EA", " ", 
+            SuperscriptBox[
+             RowBox[{
+              SubscriptBox["A", "2"], "(", "t", ")"}], "2"]}], 
+           RowBox[{
+            SuperscriptBox["L", "4"], " ", 
+            SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+          FractionBox[
+           RowBox[{"9", " ", 
+            SuperscriptBox["\[Pi]", "4"], " ", 
+            SuperscriptBox["d", "2"], " ", "EA", " ", 
+            SuperscriptBox[
+             RowBox[{
+              SubscriptBox["A", "3"], "(", "t", ")"}], "2"]}], 
+           RowBox[{"4", " ", 
+            SuperscriptBox["L", "4"], " ", 
+            SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+          FractionBox[
+           RowBox[{
+            SuperscriptBox["\[Pi]", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"2", " ", "L", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"EA", " ", 
+                  SubscriptBox["A", "top"], " ", 
+                  RowBox[{"cos", "(", 
+                   RowBox[{"t", " ", "\[CapitalOmega]"}], ")"}]}], "+", 
+                 RowBox[{"L", " ", 
+                  SubscriptBox["T", "top"]}]}], ")"}]}], "+", 
+              RowBox[{"2", " ", 
+               SuperscriptBox["\[Pi]", "2"], " ", "EI"}], "-", 
+              RowBox[{"\[Gamma]", " ", 
+               SuperscriptBox["L", "3"]}]}], ")"}]}], 
+           RowBox[{"2", " ", 
+            SuperscriptBox["L", "4"], " ", 
+            SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubscriptBox["m", "a"], "+", "m"}], ")"}]}]]}], ")"}]}], "+", 
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["\[Pi]", "4"], " ", 
+         SuperscriptBox["d", "2"], " ", "EA", " ", 
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["A", "1"], "(", "t", ")"}], "3"]}], 
+        RowBox[{"4", " ", 
+         SuperscriptBox["L", "4"], " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "-", 
+       FractionBox[
+        RowBox[{"40", " ", "\[Gamma]", " ", 
+         RowBox[{
+          SubscriptBox["A", "2"], "(", "t", ")"}]}], 
+        RowBox[{"9", " ", "L", " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       RowBox[{
+        SuperscriptBox[
+         SubscriptBox["A", "1"], "\[Prime]\[Prime]",
+         MultilineFunction->None], "(", "t", ")"}]}],
+      TraditionalForm],
+     TraditionalForm,
+     Editable->True],
+    StripOnInput->False,
+    FontFamily->"Cambria Math",
+    FontSize->14], "\[InvisibleSpace]", "\<\"\\n\\n\"\>", "\[InvisibleSpace]", 
+   StyleBox["\<\" - Second equation of motion: \\n\"\>",
+    StripOnInput->False,
+    FontFamily->"Times New Roman",
+    FontSize->16,
+    FontWeight->Bold], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     FormBox[
+      RowBox[{
+       FractionBox[
+        RowBox[{"c", " ", 
+         RowBox[{
+          SuperscriptBox[
+           SubscriptBox["A", "2"], "\[Prime]",
+           MultilineFunction->None], "(", "t", ")"}]}], 
+        RowBox[{
+         SubscriptBox["\[Omega]", "1"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       RowBox[{
+        RowBox[{
+         SubscriptBox["A", "2"], "(", "t", ")"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          FractionBox[
+           RowBox[{"9", " ", 
+            SuperscriptBox["\[Pi]", "4"], " ", 
+            SuperscriptBox["d", "2"], " ", "EA", " ", 
+            SuperscriptBox[
+             RowBox[{
+              SubscriptBox["A", "3"], "(", "t", ")"}], "2"]}], 
+           RowBox[{
+            SuperscriptBox["L", "4"], " ", 
+            SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+          FractionBox[
+           RowBox[{"2", " ", 
+            SuperscriptBox["\[Pi]", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"2", " ", "L", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"EA", " ", 
+                  SubscriptBox["A", "top"], " ", 
+                  RowBox[{"cos", "(", 
+                   RowBox[{"t", " ", "\[CapitalOmega]"}], ")"}]}], "+", 
+                 RowBox[{"L", " ", 
+                  SubscriptBox["T", "top"]}]}], ")"}]}], "+", 
+              RowBox[{"8", " ", 
+               SuperscriptBox["\[Pi]", "2"], " ", "EI"}], "-", 
+              RowBox[{"\[Gamma]", " ", 
+               SuperscriptBox["L", "3"]}]}], ")"}]}], 
+           RowBox[{
+            SuperscriptBox["L", "4"], " ", 
+            SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SubscriptBox["m", "a"], "+", "m"}], ")"}]}]]}], ")"}]}], "+", 
+       FractionBox[
+        RowBox[{"4", " ", 
+         SuperscriptBox["\[Pi]", "4"], " ", 
+         SuperscriptBox["d", "2"], " ", "EA", " ", 
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["A", "2"], "(", "t", ")"}], "3"]}], 
+        RowBox[{
+         SuperscriptBox["L", "4"], " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["\[Pi]", "4"], " ", 
+         SuperscriptBox["d", "2"], " ", "EA", " ", 
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["A", "1"], "(", "t", ")"}], "2"], " ", 
+         RowBox[{
+          SubscriptBox["A", "2"], "(", "t", ")"}]}], 
+        RowBox[{
+         SuperscriptBox["L", "4"], " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "-", 
+       FractionBox[
+        RowBox[{"40", " ", "\[Gamma]", " ", 
+         RowBox[{
+          SubscriptBox["A", "1"], "(", "t", ")"}]}], 
+        RowBox[{"9", " ", "L", " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "-", 
+       FractionBox[
+        RowBox[{"312", " ", "\[Gamma]", " ", 
+         RowBox[{
+          SubscriptBox["A", "3"], "(", "t", ")"}]}], 
+        RowBox[{"25", " ", "L", " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       RowBox[{
+        SuperscriptBox[
+         SubscriptBox["A", "2"], "\[Prime]\[Prime]",
+         MultilineFunction->None], "(", "t", ")"}]}],
+      TraditionalForm],
+     TraditionalForm,
+     Editable->True],
+    StripOnInput->False,
+    FontFamily->"Cambria Math",
+    FontSize->14], "\[InvisibleSpace]", "\<\"\\n\\n\"\>", "\[InvisibleSpace]", 
+   StyleBox["\<\" - Third equation of motion: \\n\"\>",
+    StripOnInput->False,
+    FontFamily->"Times New Roman",
+    FontSize->16,
+    FontWeight->Bold], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     FormBox[
+      RowBox[{
+       FractionBox[
+        RowBox[{"c", " ", 
+         RowBox[{
+          SuperscriptBox[
+           SubscriptBox["A", "3"], "\[Prime]",
+           MultilineFunction->None], "(", "t", ")"}]}], 
+        RowBox[{
+         SubscriptBox["\[Omega]", "1"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       FractionBox[
+        RowBox[{"81", " ", 
+         SuperscriptBox["\[Pi]", "4"], " ", 
+         SuperscriptBox["d", "2"], " ", "EA", " ", 
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["A", "3"], "(", "t", ")"}], "3"]}], 
+        RowBox[{"4", " ", 
+         SuperscriptBox["L", "4"], " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       FractionBox[
+        RowBox[{"9", " ", 
+         SuperscriptBox["\[Pi]", "4"], " ", 
+         SuperscriptBox["d", "2"], " ", "EA", " ", 
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["A", "1"], "(", "t", ")"}], "2"], " ", 
+         RowBox[{
+          SubscriptBox["A", "3"], "(", "t", ")"}]}], 
+        RowBox[{"4", " ", 
+         SuperscriptBox["L", "4"], " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       FractionBox[
+        RowBox[{"9", " ", 
+         SuperscriptBox["\[Pi]", "4"], " ", 
+         SuperscriptBox["d", "2"], " ", "EA", " ", 
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["A", "2"], "(", "t", ")"}], "2"], " ", 
+         RowBox[{
+          SubscriptBox["A", "3"], "(", "t", ")"}]}], 
+        RowBox[{
+         SuperscriptBox["L", "4"], " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       FractionBox[
+        RowBox[{"9", " ", 
+         SuperscriptBox["\[Pi]", "2"], " ", 
+         RowBox[{
+          SubscriptBox["A", "3"], "(", "t", ")"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "L", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"EA", " ", 
+               SubscriptBox["A", "top"], " ", 
+               RowBox[{"cos", "(", 
+                RowBox[{"t", " ", "\[CapitalOmega]"}], ")"}]}], "+", 
+              RowBox[{"L", " ", 
+               SubscriptBox["T", "top"]}]}], ")"}]}], "+", 
+           RowBox[{"18", " ", 
+            SuperscriptBox["\[Pi]", "2"], " ", "EI"}], "-", 
+           RowBox[{"\[Gamma]", " ", 
+            SuperscriptBox["L", "3"]}]}], ")"}]}], 
+        RowBox[{"2", " ", 
+         SuperscriptBox["L", "4"], " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "-", 
+       FractionBox[
+        RowBox[{"312", " ", "\[Gamma]", " ", 
+         RowBox[{
+          SubscriptBox["A", "2"], "(", "t", ")"}]}], 
+        RowBox[{"25", " ", "L", " ", 
+         SubsuperscriptBox["\[Omega]", "1", "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["m", "a"], "+", "m"}], ")"}]}]], "+", 
+       RowBox[{
+        SuperscriptBox[
+         SubscriptBox["A", "3"], "\[Prime]\[Prime]",
+         MultilineFunction->None], "(", "t", ")"}]}],
+      TraditionalForm],
+     TraditionalForm,
+     Editable->True],
+    StripOnInput->False,
+    FontFamily->"Cambria Math",
+    FontSize->14], "\[InvisibleSpace]", "\<\"\\n\\n\"\>"}],
+  SequenceForm[
+   Style["Equations of motion: \n\n", FontSize -> 20, FontWeight -> Bold, 
+    Background -> RGBColor[0.87, 0.94, 1], FontFamily -> "Times New Roman"], 
+   Style[" - First equation of motion: \n", FontSize -> 16, FontWeight -> 
+    Bold, FontFamily -> "Times New Roman"], 
+   Style[
+    TraditionalForm[
+    Rational[1, 4] $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+      Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 1][$CellContext`t]^3 + 
+     Rational[-40, 
+        9] $CellContext`L^(-1) $CellContext`\[Gamma] ($CellContext`m + 
+        Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 2][$CellContext`t] + 
+     Subscript[$CellContext`A, 1][$CellContext`t] (
+       Rational[1, 2] $CellContext`L^(-4) 
+        Pi^2 ($CellContext`m + 
+          Subscript[$CellContext`m, $CellContext`a])^(-1) (
+         2 $CellContext`EI Pi^2 - $CellContext`L^3 $CellContext`\[Gamma] + 
+         2 $CellContext`L ($CellContext`EA 
+            Cos[$CellContext`t $CellContext`\[CapitalOmega]] 
+            Subscript[$CellContext`A, $CellContext`top] + $CellContext`L 
+            Subscript[$CellContext`T, $CellContext`top])) 
+        Subscript[$CellContext`\[Omega], 
+           1]^(-2) + $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+        Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1)
+           Subscript[$CellContext`\[Omega], 1]^(-2) 
+        Subscript[$CellContext`A, 2][$CellContext`t]^2 + 
+       Rational[9, 4] $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+        Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1)
+           Subscript[$CellContext`\[Omega], 1]^(-2) 
+        Subscript[$CellContext`A, 
+           3][$CellContext`t]^2) + $CellContext`c ($CellContext`m + 
+        Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-1) Derivative[1][
+        Subscript[$CellContext`A, 1]][$CellContext`t] + Derivative[2][
+       Subscript[$CellContext`A, 1]][$CellContext`t]], FontSize -> 14, 
+    FontFamily -> "Cambria Math"], "\n\n", 
+   Style[" - Second equation of motion: \n", FontSize -> 16, FontWeight -> 
+    Bold, FontFamily -> "Times New Roman"], 
+   Style[
+    TraditionalForm[
+    Rational[-40, 
+        9] $CellContext`L^(-1) $CellContext`\[Gamma] ($CellContext`m + 
+        Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 
+        1][$CellContext`t] + $CellContext`d^2 $CellContext`EA \
+$CellContext`L^(-4) 
+      Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 1][$CellContext`t]^2 
+      Subscript[$CellContext`A, 2][$CellContext`t] + 
+     4 $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+      Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 2][$CellContext`t]^3 + 
+     Rational[-312, 
+        25] $CellContext`L^(-1) $CellContext`\[Gamma] ($CellContext`m + 
+        Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 3][$CellContext`t] + 
+     Subscript[$CellContext`A, 2][$CellContext`t] (
+       2 $CellContext`L^(-4) 
+        Pi^2 ($CellContext`m + 
+          Subscript[$CellContext`m, $CellContext`a])^(-1) (
+         8 $CellContext`EI Pi^2 - $CellContext`L^3 $CellContext`\[Gamma] + 
+         2 $CellContext`L ($CellContext`EA 
+            Cos[$CellContext`t $CellContext`\[CapitalOmega]] 
+            Subscript[$CellContext`A, $CellContext`top] + $CellContext`L 
+            Subscript[$CellContext`T, $CellContext`top])) 
+        Subscript[$CellContext`\[Omega], 1]^(-2) + 
+       9 $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+        Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1)
+           Subscript[$CellContext`\[Omega], 1]^(-2) 
+        Subscript[$CellContext`A, 
+           3][$CellContext`t]^2) + $CellContext`c ($CellContext`m + 
+        Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-1) Derivative[1][
+        Subscript[$CellContext`A, 2]][$CellContext`t] + Derivative[2][
+       Subscript[$CellContext`A, 2]][$CellContext`t]], FontSize -> 14, 
+    FontFamily -> "Cambria Math"], "\n\n", 
+   Style[" - Third equation of motion: \n", FontSize -> 16, FontWeight -> 
+    Bold, FontFamily -> "Times New Roman"], 
+   Style[
+    TraditionalForm[
+    Rational[-312, 
+        25] $CellContext`L^(-1) $CellContext`\[Gamma] ($CellContext`m + 
+        Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 2][$CellContext`t] + 
+     Rational[9, 2] $CellContext`L^(-4) 
+      Pi^2 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1) (
+       18 $CellContext`EI Pi^2 - $CellContext`L^3 $CellContext`\[Gamma] + 
+       2 $CellContext`L ($CellContext`EA 
+          Cos[$CellContext`t $CellContext`\[CapitalOmega]] 
+          Subscript[$CellContext`A, $CellContext`top] + $CellContext`L 
+          Subscript[$CellContext`T, $CellContext`top])) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 3][$CellContext`t] + 
+     Rational[9, 4] $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+      Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 1][$CellContext`t]^2 
+      Subscript[$CellContext`A, 3][$CellContext`t] + 
+     9 $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+      Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 2][$CellContext`t]^2 
+      Subscript[$CellContext`A, 3][$CellContext`t] + 
+     Rational[81, 4] $CellContext`d^2 $CellContext`EA $CellContext`L^(-4) 
+      Pi^4 ($CellContext`m + Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-2) 
+      Subscript[$CellContext`A, 
+         3][$CellContext`t]^3 + $CellContext`c ($CellContext`m + 
+        Subscript[$CellContext`m, $CellContext`a])^(-1) 
+      Subscript[$CellContext`\[Omega], 1]^(-1) Derivative[1][
+        Subscript[$CellContext`A, 3]][$CellContext`t] + Derivative[2][
+       Subscript[$CellContext`A, 3]][$CellContext`t]], FontSize -> 14, 
+    FontFamily -> "Cambria Math"], "\n\n"],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.8347667260531683`*^9, 3.8347667451612062`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[28]:=",ExpressionUUID->"e93edf72-5f85-4db8-86bc-7a00d2f1bd25"]
 },
 WindowSize->{992, 782},
 WindowMargins->{{Automatic, -3}, {Automatic, 0}},
@@ -1181,18 +1607,20 @@ CellTagsIndex->{}
 Notebook[{
 Cell[558, 20, 2224, 58, 127, "Text",ExpressionUUID->"a61800ed-711b-4587-96da-cede052033a6"],
 Cell[2785, 80, 680, 11, 38, "Text",ExpressionUUID->"22b21a6b-03ab-4d98-aade-3814c0d03661"],
-Cell[3468, 93, 1059, 21, 54, "Text",ExpressionUUID->"4cb7b5b0-ebf1-4fb7-ba69-3aca8ce7a129"],
-Cell[4530, 116, 144, 3, 30, "Text",ExpressionUUID->"f3fbf2b6-9448-4552-9969-36943c47f37f"],
+Cell[3468, 93, 772, 18, 32, "Text",ExpressionUUID->"4cb7b5b0-ebf1-4fb7-ba69-3aca8ce7a129"],
+Cell[4243, 113, 144, 3, 30, "Text",ExpressionUUID->"f3fbf2b6-9448-4552-9969-36943c47f37f"],
 Cell[CellGroupData[{
-Cell[4699, 123, 4746, 66, 39, "Input",ExpressionUUID->"b9ac244b-7dfa-4310-91a2-ffa575020b14",
+Cell[4412, 120, 4746, 66, 39, "Input",ExpressionUUID->"b9ac244b-7dfa-4310-91a2-ffa575020b14",
  CellGroupingRules->{"GroupTogetherGrouping", 10000.}],
-Cell[9448, 191, 6978, 133, 308, "Input",ExpressionUUID->"c67aa071-2003-4e65-9ac0-c52480838be9",
+Cell[9161, 188, 6978, 133, 308, "Input",ExpressionUUID->"c67aa071-2003-4e65-9ac0-c52480838be9",
  CellGroupingRules->{"GroupTogetherGrouping", 10000.}],
-Cell[16429, 326, 26344, 655, 1459, "Input",ExpressionUUID->"87c1c2f8-6173-41ba-8ad4-cd4f8ccdcb3b",
- CellGroupingRules->{"GroupTogetherGrouping", 10000.}],
-Cell[42776, 983, 9843, 177, 736, "Input",ExpressionUUID->"7690ba06-6948-4e78-9aa6-0cbb6b0a71d8",
+Cell[16142, 323, 26344, 655, 1459, "Input",ExpressionUUID->"87c1c2f8-6173-41ba-8ad4-cd4f8ccdcb3b",
  CellGroupingRules->{"GroupTogetherGrouping", 10000.}]
-}, Open  ]]
+}, Open  ]],
+Cell[42501, 981, 653, 14, 32, "Text",ExpressionUUID->"37e1924f-7dd2-488a-97a3-d0fe6c10a36a"],
+Cell[43157, 997, 7158, 120, 352, "Input",ExpressionUUID->"7690ba06-6948-4e78-9aa6-0cbb6b0a71d8",
+ CellGroupingRules->{"GroupTogetherGrouping", 10000.}],
+Cell[50318, 1119, 19146, 468, 673, "Print",ExpressionUUID->"e93edf72-5f85-4db8-86bc-7a00d2f1bd25"]
 }
 ]
 *)
