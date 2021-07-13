@@ -14,16 +14,19 @@ genOpt = GeneralOptions(...
     1,... plot results in multiple tabs
     0,... save ALL figures
     0,... export .mat
-    1 ... load .mat
+    0 ... load .mat
 );
 genOpt.SolOpt.n_plot = [2 4];
 
 %% Increment 'n' and show demanded data
-for cur_n = genOpt.SolOpt.n0 : genOpt.SolOpt.dn : 4%genOpt.SolOpt.nf
+for cur_n = genOpt.SolOpt.n0 : genOpt.SolOpt.dn : genOpt.SolOpt.nf
 
     %% Initialize data
+    db = strcat('..\Data\Database-n',num2str(cur_n),'.mat');
+    
+    % Read data
     if genOpt.load_data == true
-        load('..\Data\Database.mat');
+        load(db);
     else
         [shpFun, rom, fem] = SetModel(genOpt, cur_n);
     end
@@ -43,15 +46,15 @@ for cur_n = genOpt.SolOpt.n0 : genOpt.SolOpt.dn : 4%genOpt.SolOpt.nf
     
     %% Show results
     if ismember(cur_n, genOpt.SolOpt.n_plot)
-        PostProcessing.PlotResults(rom, fem, shpFun, cur_n, ...
-            genOpt.plot_tensions, genOpt.plotTabs, genOpt.saveFigs);
+        PostProcessing.PlotResults(rom, fem, shpFun, cur_n, genOpt);
+    end
+    
+    
+    %% Export data
+    if genOpt.export_data == true
+        save(db,'rom','fem','shpFun');
     end
 	
-end
-
-%% Export data
-if genOpt.export_data == true
-    save('..\Data\Database.mat','rom','fem','shpFun');
 end
 
 toc

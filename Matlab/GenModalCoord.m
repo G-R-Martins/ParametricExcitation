@@ -66,7 +66,16 @@ classdef GenModalCoord < Plots & handle
               
         
         %% Plot general results
-        function this = PlotResults(this, k, open_tab, t_sol, x_sol)
+        function this = PlotResults(this, k, open_tab, t_sol, x_sol, joinPlots)
+            % Set axes label
+            if joinPlots == false
+                axesLab = containers.Map(["A" "dA" "S_A"],...
+                    [this.labels.A(k) this.labels.dA(k) ...
+                    strcat('S_Â_',num2str(k),'(f)')]);
+            else
+                axesLab = containers.Map(["A" "dA" "S_A"],...
+                    ["A_k(\tau)/D" "A_k'(\tau) / D" "S_Â(f)"]);
+            end
             
             % Open new tab
             if open_tab == true
@@ -79,49 +88,48 @@ classdef GenModalCoord < Plots & handle
                 subplot(2,2,2)
                 hold on; box on;
                 xlabel('\tau = t\omega_1','FontName',this.FontName,'fontsize',this.FontSize)
-                ylabel(this.labels.A(k),'FontName',this.FontName,'fontsize',this.FontSize)
+                ylabel(axesLab('A'),'FontName',this.FontName,'fontsize',this.FontSize)
                 set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
                 
-                plot(t_sol, x_sol(:,k), this.lines(1,1))
-                
+                plot(t_sol, x_sol(:,k))%, this.lines(1,1))
                 
                 % Frequency spectrum
                 subplot(2,2,4)
                 hold on; box on;
                 xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-                ylabel("Amplitude", 'FontName', this.FontName, 'fontsize', this.FontSize)
+                ylabel(axesLab("S_A"), 'FontName', this.FontName, 'fontsize', this.FontSize)
                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
                 
-                plot(this.freq_A_k{k}, this.ampl_A_k{k}, this.lines(1,1))
+                plot(this.freq_A_k{k}, this.ampl_A_k{k})%, this.lines(1,1))
                 
                 % Phase space
                 subplot(2,2,[1 3])
                 hold on; box on;
-                xlabel(this.labels.A(k), 'FontName', this.FontName, 'fontsize', this.FontSize)
-                ylabel(this.labels.dA(k), 'FontName', this.FontName, 'fontsize', this.FontSize)
+                xlabel(axesLab('A'), 'FontName', this.FontName, 'fontsize', this.FontSize)
+                ylabel(axesLab('dA'), 'FontName', this.FontName, 'fontsize', this.FontSize)
                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize)
                 
-                plot(x_sol(:,k), x_sol(:,k+3), this.lines(1,1));
+                plot(x_sol(:,k), x_sol(:,k+3))%, this.lines(1,1));
                 
             else %-- not include phase space
                  % Displacement time series
                  subplot(2,1,1)
                  hold on; box on;
                  xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'fontsize', this.FontSize);
-                 ylabel(this.labels.A,'FontName', this.FontName, 'fontsize', this.FontSize);
+                 ylabel(axesLab('A'),'FontName', this.FontName, 'fontsize', this.FontSize);
                  set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot);
                  
-                 plot(t_sol, x_sol(:,k), this.lines(1,1));
+                 plot(t_sol, x_sol(:,k))%, this.lines(1,1));
                  
                  
                  % Frequency spectrum
                  subplot(2,1,2)
                  hold on; box on;
                  xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-                 ylabel('Amplitude', 'FontName', this.FontName, 'fontsize', this.FontSize)
+                 ylabel(axesLab("S_A"), 'FontName', this.FontName, 'fontsize', this.FontSize)
                  set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
                  
-                 plot(this.freq_A_k{k}, this.ampl_A_k{k}, this.lines(1,1))
+                 plot(this.freq_A_k{k}, this.ampl_A_k{k})%, this.lines(1,1))
             end
         end
                 
