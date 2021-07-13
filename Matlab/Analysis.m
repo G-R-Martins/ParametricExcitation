@@ -51,7 +51,7 @@ classdef Analysis
                     %% ROM - Displacements
                     for ii = 1:3
                         rom{cont_rom}.CalculateResults(shpFun.modes, ii);
-%                         rom{cont_rom}.CalculateSpectrum(ii);
+                        
                         [rom{cont_rom}.Freq{ii}, rom{cont_rom}.Ampl{ii},...
                             rom{cont_rom}.Fd(ii), rom{cont_rom}.Ad(ii)] =...
                             Analysis.Spectrum(rom{cont_rom}.t_sol, rom{cont_rom}.U{ii});
@@ -81,19 +81,27 @@ classdef Analysis
         function fem = FEMs(fem)
             
             % Iterates through fem objects
-            for cont_rom = 1:size(fem,2)
+            for cont_fem = 1:size(fem,2)
                 
-                if isempty(fem{cont_rom}) == false
+                if isempty(fem{cont_fem}) == false
                     % Displacements
-                    init=3703;
                     for ii = 1:3
-%                         fem{cont_rom}.CalculateSpectrum(ii);
-                        [fem{cont_rom}.Freq{ii}, fem{cont_rom}.Ampl{ii},...
-                            fem{cont_rom}.Fd(ii), fem{cont_rom}.Ad(ii)] =...
-                            Analysis.Spectrum(fem{cont_rom}.time(init:size(fem{cont_rom}.time,1),1),...
-                            fem{cont_rom}.U{ii}(init:size(fem{cont_rom}.time,1)));
+%                         fem{cont_fem}.CalculateSpectrum(ii);
+                        [fem{cont_fem}.Freq{ii}, fem{cont_fem}.Ampl{ii},...
+                            fem{cont_fem}.Fd(ii), fem{cont_fem}.Ad(ii)] =...
+                            Analysis.Spectrum(fem{cont_fem}.time,...
+                            fem{cont_fem}.U{ii});
+                    end
+                    
+                    % Read scalogram data
+                    if fem{cont_fem}.out_bools.plot_scalogram == true 
+                        fem{cont_fem}.SetScalogram();
                     end
                 end 
+                
+                
+                    
+                
                 
             end % end for('fem' objects)
         end % end function
