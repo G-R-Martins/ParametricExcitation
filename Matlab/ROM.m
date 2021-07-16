@@ -63,9 +63,9 @@ classdef ROM < Plots & handle
     end
     
     properties (Constant)
-        titles = ["u(L/4)" "u(L/2)" "u(3L/4)"];
-        labels = struct('u',["u(L/4,\tau)/D" "u(L/2,\tau)/D" "u(3L/4,\tau)/D"],...
-            'du',["u'(L/4,\tau)/D" "u'(L/2,\tau)/D" "u'(3L/4,\tau)/D"]);
+        titles = ["$ u(L/4) $" "$ u(L/2) $" "$ u(3L/4) $"];
+        labels = struct('u',["$u (L/4,\tau)/D $" "$ u(L/2,\tau)/D $" "$ u(3L/4,\tau)/D $"],...
+            'du',["$ u'(L/4,\tau)/D $" "$ u'(L/2,\tau)/D $" "$ u'(3L/4,\tau)/D $"]);
         
     end
     
@@ -154,7 +154,7 @@ classdef ROM < Plots & handle
         %%=== Functions ===%%
         
         %% Setting plot/save options
-        function this = SetOutputOptions(this, save_disp, save_scalogram,...
+        function SetOutputOptions(this, save_disp, save_scalogram,...
                 save_tension, show_phaseSpace, show_scalogram)
             % Saving options
             this.out_bools.save_disp = save_disp;
@@ -168,7 +168,7 @@ classdef ROM < Plots & handle
         
         
         %% Evaluate displacements and velocities
-        function this = CalculateResults(this, modes, k)
+        function CalculateResults(this, modes, k)
 			sz = size(modes,2)*k/4;
             this.U{k} = this.x_sol(:,1)*modes(1,sz) + ...
                 this.x_sol(:,2)*modes(2,sz) + this.x_sol(:,3)*modes(3,sz);
@@ -178,7 +178,7 @@ classdef ROM < Plots & handle
         
         
         %% Solve the system equations
-        function this = SolveSystemEqs(this, n, modes)
+        function SolveSystemEqs(this, n, modes)
             t = GeneralOptions.SolOpt.ti:GeneralOptions.SolOpt.dt:GeneralOptions.SolOpt.tf;
             f = @(t,x) this.Integrator(t, x, n, modes);
             [this.t_sol, this.x_sol] = ode45(f, t, GeneralOptions.SolOpt.x0);
@@ -221,7 +221,7 @@ classdef ROM < Plots & handle
         end
         
         %% Set permanent regime range
-        function this = SetPermanentRange(this)
+        function SetPermanentRange(this)
             
             % Begin of permanent regime (to evaluate spectrum)
             [id,~] = find(this.t_sol >= GeneralOptions.SolOpt.permaTime(1));
@@ -241,28 +241,40 @@ classdef ROM < Plots & handle
         
         
         %% Tension
-        function this = SetTensions(this, n)
+        function SetTensions(this, n, loc)
             global beamData
-            this.Tension_top = this.Tt - this.gamma * beamData.L +...            
+            if loc == 1
+                this.Tension_top = this.Tt - this.gamma * beamData.L +...            
                 this.gamma*beamData.L +beamData.EA/beamData.L*beamData.At...
-                * sin(n*this.w1*this.t_sol);%
-            this.Tension_bottom = this.Tt - this.gamma * beamData.L +...            
+                * sin(n*this.t_sol);
+            elseif loc == 2
+                this.Tension_bottom = this.Tt - this.gamma * beamData.L +...            
                 + beamData.EA/beamData.L*beamData.At...
-                * sin(n*this.w1*this.t_sol);%
+                * sin(n*this.t_sol);
+            else
+                error("invalid option to set tension. It MUST be 1 (top) or 2 (bottom)")
+            end
         end
         
         
         %% Bottom/Top tensions
-        function this = PlotTensions(this)
-            plot(this.t_sol, this.Tension_top, ...
-                this.lines(3*this.isImmersed,1+2*this.isImmersed));
-            plot(this.t_sol, this.Tension_bottom, ...
-                this.lines(3*this.isImmersed,2+2*this.isImmersed));
+        function PlotTensions(this, loc)
+            if loc == 1
+                plot(this.t_sol, this.Tension_top, ...
+                    this.lines(loc,... default line
+                        1+2*this.isImmersed)); % black
+            elseif loc == 2
+                plot(this.t_sol, this.Tension_bottom, ...
+                    this.lines(loc+1,... dot dashed
+                        1+2*this.isImmersed)); % dark orange (?)
+            else
+                error("Invalid option to plot tension. It MUST be 1 (top) or 2 (bottom)");
+            end
         end
         
         
         %% Plot in multiple tabs
-        function this = PlotResults(this, k, open_tab)
+        function PlotResults(this, k, open_tab)
             
             % Open new tab
             if open_tab == true
@@ -275,9 +287,13 @@ classdef ROM < Plots & handle
                 %-- Displacement time series
                 subplot(2,2,2)
                 hold on; box on;
-                xlabel('\tau = t\omega_1','FontName',this.FontName,'FontSize',this.FontSize)
-                ylabel(this.labels.u(k),'FontName',this.FontName,'FontSize',this.FontSize)
-                set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
+                set(gca, 'fontsize', this.FontSize, ...
+                    'xlim', GeneralOptions.SolOpt.permaPlot,...
+                    'TickLabelInterpreter',Plots.interpreter)
+                xlabel(Plots.defAxis('tau'),'FontName',this.FontName,...
+                    'FontSize',this.FontSize,'Interpreter',Plots.interpreter)
+                ylabel(this.labels.u(k),'FontName',this.FontName,...
+                    'FontSize',this.FontSize,'Interpreter',Plots.interpreter)
                 
                 plot(this.t_sol, this.U{k},this.lines(1,1+2*this.isImmersed))
                 
@@ -285,18 +301,24 @@ classdef ROM < Plots & handle
                 %-- Frequency spectrum
                 subplot(2,2,4)
                 hold on; box on;
-                xlabel('f/f_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
-                ylabel("S_û(f)", 'FontName', this.FontName, 'FontSize', this.FontSize)
-                set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', this.lim_plot_freq)
+                set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize, ...
+                    'xlim', this.lim_plot_freq,'TickLabelInterpreter',Plots.interpreter)
+                xlabel(Plots.defAxis('f'), 'FontName', this.FontName, ...
+                    'FontSize',this.FontSize,'Interpreter',Plots.interpreter)
+                ylabel('$ S_\hat{u}(f) $', 'FontName', this.FontName, ...
+                    'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                 
                 plot(this.Freq{k}, this.Ampl{k},this.lines(1,1+2*this.isImmersed))
                 
                 %-- Phase space
                 subplot(2,2,[1 3])
                 hold on; box on;
-                xlabel(this.labels.u(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
-                ylabel(this.labels.du(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
-                set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize)
+                set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize,...
+                    'TickLabelInterpreter',Plots.interpreter)
+                xlabel(this.labels.u(k), 'FontName', this.FontName, ...
+                    'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                ylabel(this.labels.du(k), 'FontName', this.FontName, ...
+                    'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                 
                 plot(this.U{k}(this.plot_range(1):this.plot_range(2),1),...
                     this.V{k}(this.plot_range(1):this.plot_range(2),1),...
@@ -306,9 +328,13 @@ classdef ROM < Plots & handle
                  %-- Displacement time series
                  subplot(2,1,1)
                  hold on; box on;
-                 xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'FontSize', this.FontSize);
-                 ylabel(this.labels.u(k),'FontName', this.FontName, 'FontSize', this.FontSize);
-                 set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot);
+                 set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize, ...
+                     'xlim', GeneralOptions.SolOpt.permaPlot,...
+                     'TickLabelInterpreter',Plots.interpreter);
+                 xlabel(Plots.defAxis('tau'), 'FontName', this.FontName, ...
+                     'FontSize',this.FontSize,'Interpreter',Plots.interpreter);
+                 ylabel(this.labels.u(k),'FontName', this.FontName, ...
+                     'FontSize',this.FontSize,'Interpreter',Plots.interpreter);
                  
                  plot(this.t_sol, this.U{k}, this.lines(1,1+2*this.isImmersed));
                  
@@ -316,9 +342,12 @@ classdef ROM < Plots & handle
                  %-- Frequency spectrum
                  subplot(2,1,2)
                  hold on; box on;
-                 xlabel('f/f_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
-                 ylabel('S_û(f)', 'FontName', this.FontName, 'FontSize', this.FontSize)
-                 set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize, 'xlim', this.lim_plot_freq)
+                 set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize, ...
+                     'xlim',this.lim_plot_freq,'TickLabelInterpreter',Plots.interpreter)
+                 xlabel(Plots.defAxis('f'), 'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                 ylabel('$ S_\hat{u}(f) $', 'FontName', this.FontName,...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                  
                  plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1+2*this.isImmersed))
             end
@@ -329,7 +358,7 @@ classdef ROM < Plots & handle
              
         
         %% Plot scalogram
-        function this = PlotScalogram(this, open_tab, z_norm, modes)
+        function PlotScalogram(this, open_tab, z_norm, modes)
             
             dTau = (this.t_sol(this.plot_range(2)) - ...
                 this.t_sol(this.plot_range(1)) );
@@ -368,17 +397,21 @@ classdef ROM < Plots & handle
             
             % Color bar plot
             cb = colorbar;
-            cb.Label.String = 'u(z/L,\tau)/D';
+            cb.Label.String = '$ u(z/L,\tau)/D $';
             cb.Label.FontSize = this.FontSize;
             cb.Label.FontName = this.FontName;
+            cb.Label.Interpreter = Plots.interpreter;
+            set(cb,'TickLabelInterpreter',Plots.interpreter);
             
             colormap jet
             
-            % Legends
-            xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'FontSize', this.FontSize)
-            ylabel('z/L', 'FontName', this.FontName, 'FontSize', this.FontSize)
+            % Labels
             set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize,...
-                'xlim',[4960 5060])
+                'xlim',[4960 5060],'TickLabelInterpreter',Plots.interpreter)
+            xlabel(Plots.defAxis('tau'), 'FontName', this.FontName, ...
+                'FontSize',this.FontSize,'Interpreter',Plots.interpreter)
+            ylabel(Plots.defAxis('z'), 'FontName',this.FontName, ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
             
         end
         

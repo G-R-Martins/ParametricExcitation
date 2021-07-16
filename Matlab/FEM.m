@@ -48,16 +48,15 @@ classdef FEM < Plots & handle
         % Scalogram data
         scalogram
         
-        
         % Directory with monitors data
         dir
     end
     
     
     properties (Constant)
-        titles = ["u(L/4)" "u(L/2)" "u(3L/4)"]
-        labels = struct('u',["u(L/4,\tau)/D" "u(L/2,\tau)/D" "u(3L/4,\tau)/D"],...
-            'du',["u'(L/4,\tau)/D" "u'(L/2,\tau)/D" "u'(3L/4,\tau)/D"])
+        titles = ["$ u(L/4) $" "$ u(L/2) $" "$ u(3L/4) $"]
+        labels = struct('u',["$ u(L/4,\tau)/D $" "$ u(L/2,\tau)/D $" "$ u(3L/4,\tau)/D $"],...
+            'du',[" $u'(L/4,\tau)/D $" "$ u'(L/2,\tau)/D $" "$ u'(3L/4,\tau)/D $"])
         
         % Directory of the Giraffe monitors
         data_dir = "..\Data\GiraffeData\"
@@ -126,7 +125,7 @@ classdef FEM < Plots & handle
         %%=== Functions ===%%
         
         %% Setting plot/save options
-        function this = SetOutputOptions(this, save_disp, save_tension, ...
+        function SetOutputOptions(this, save_disp, save_tension, ...
                 save_scalogram , plot_scalogram)
             % Saving options
             this.out_bools.save_disp = save_disp;
@@ -140,7 +139,7 @@ classdef FEM < Plots & handle
         
         
         %% Plot data in multiple tabs
-        function this = PlotResults(this, k, bool_open_tab, nPlots)
+        function PlotResults(this, k, bool_open_tab, nPlots)
             % Open new tab
             if bool_open_tab == true
                 thistab = uitab('Title',this.titles(k),'BackgroundColor', 'w'); % build iith tab
@@ -153,9 +152,14 @@ classdef FEM < Plots & handle
             end
             
             hold on; box on;
-            xlabel('\tau = t\omega_1','FontName',this.FontName,'FontSize',this.FontSize)
-            ylabel(this.labels.u(k),'FontName',this.FontName,'FontSize',this.FontSize)
-            set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
+            set(gca, 'fontsize', this.FontSize, ...
+                'xlim', GeneralOptions.SolOpt.permaPlot, ...
+                'TickLabelInterpreter',Plots.interpreter)
+            xlabel(Plots.defAxis('tau'),'FontName',this.FontName, ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+            ylabel(this.labels.u(k),'FontName',this.FontName, ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+            
             
             plot(this.time, this.U{k}, this.markers(2+2*this.isImmersed))
             
@@ -165,9 +169,14 @@ classdef FEM < Plots & handle
             end
             
             hold on; box on;
-            xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-            ylabel("S_û(f)", 'FontName', this.FontName, 'fontsize', this.FontSize)
-            set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
+            set(gca, 'FontName', this.FontName, 'fontsize',this.FontSize,...
+                'xlim',this.lim_plot_freq, ...
+                'TickLabelInterpreter',Plots.interpreter)
+            xlabel(Plots.defAxis('f'), 'FontName', this.FontName,  ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+            ylabel(Plots.defAxis('Su'), 'FontName', this.FontName,  ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+            
             
             plot(this.Freq{k}, this.Ampl{k}, this.markers(2+2*this.isImmersed));
             
@@ -175,9 +184,13 @@ classdef FEM < Plots & handle
             % Phase space
             subplot(2,2,[1 3])
             hold on; box on;
-            xlabel(this.labels.u(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
-            ylabel(this.labels.du(k), 'FontName', this.FontName, 'FontSize', this.FontSize)
-            set(gca, 'FontName', this.FontName, 'FontSize', this.FontSize)
+            set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize,...
+                'TickLabelInterpreter',Plots.interpreter)
+            xlabel(this.labels.u(k), 'FontName',this.FontName, ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+            ylabel(this.labels.du(k), 'FontName',this.FontName, ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+            
             
             plot(this.U{k}(this.plot_range(1):this.plot_range(2),1), ...
                 this.dU{k}(this.plot_range(1):this.plot_range(2),1), ...
@@ -187,39 +200,41 @@ classdef FEM < Plots & handle
         
         
         %% Set tensions
-        function this = SetTensions(this)
+        function SetTensions(this, loc)
             % Bottom
-            inpt = readtable(strcat(this.dir,'monitor_element_',...
-                num2str(this.elements(1)) ), 'HeaderLines',1);
-            this.Tension_bottom = ...
-                table2array(inpt(this.permaRegInit:size(inpt,1),4));
-            % Top 
-            inpt = readtable(strcat(this.dir,'monitor_element_',...
-                num2str(this.elements(2)) ), 'HeaderLines',1);
-            this.Tension_top = ...
-                table2array(inpt(this.permaRegInit:size(inpt,1),4));
-%             % Bottom
-%             inpt = readtable(strcat(this.dir,'monitor_node_1'),...
-%                 'HeaderLines',1);
-%             this.Tension_bottom = ...
-%                 table2array(inpt(this.permaRegInit:size(inpt,1),10));
-%             % Top 
-%             inpt = readtable(strcat(this.dir,'monitor_node_42'),...
-%                 'HeaderLines',1);
-%             this.Tension_top = ...
-%                 table2array(inpt(this.permaRegInit:size(inpt,1),10));
+            if loc == 1
+                % Top
+                inpt = readtable(strcat(this.dir,'monitor_element_',...
+                    num2str(this.elements(2)) ), 'HeaderLines',1);
+                this.Tension_top = ...
+                    table2array(inpt(this.permaRegInit:size(inpt,1),4));
+            elseif loc == 2
+                % Bottom
+                inpt = readtable(strcat(this.dir,'monitor_element_',...
+                    num2str(this.elements(1)) ), 'HeaderLines',1);
+                this.Tension_bottom = ...
+                    table2array(inpt(this.permaRegInit:size(inpt,1),4));
+            else
+                error("invalid option to set tension. It MUST be 1 (top) or 2 (bottom)")
+            end
+            
         end
         
         %% Print bottom/top tensions
-        function this = PlotTensions(this)
-            plot(this.time/(2*pi*this.f), this.Tension_top, ...
-                this.lines(3,1+2*this.isImmersed));
-            plot(this.time/(2*pi*this.f), this.Tension_bottom, ...
-                this.lines(3,2+2*this.isImmersed));
+        function PlotTensions(this, loc)
+            if loc == 1
+                plot(this.time, this.Tension_top, ...
+                    this.markers(2+2*this.isImmersed)); % red
+            elseif loc == 2
+                plot(this.time, this.Tension_bottom, ...
+                    this.markers(2+2*this.isImmersed)); % blue
+            else
+                error("invalid option to plottension. It MUST be 1 (top) or 2 (bottom)")
+            end
         end
         
         
-        function this = SetScalogram(this)
+        function SetScalogram(this)
             global beamData
             
             % Range to plot scalogram
@@ -262,12 +277,12 @@ classdef FEM < Plots & handle
         end
         
         
-        function this = PlotScalogram(this, open_tab)
+        function PlotScalogram(this, open_tab)
             
             % Open new tab
             if open_tab == true
-                if this.isImmersed; tabName = 'Scalogram-fem-water';
-                else;               tabName = 'Scalogram-fem-air';  end
+                if this.isImmersed; tabName = 'Scalogram-FEM-water';
+                else;               tabName = 'Scalogram-FEM-air';  end
                 
                 thistab = uitab('Title', tabName, 'BackgroundColor','w');
                 axes('Parent',thistab); % somewhere to plot
@@ -283,25 +298,28 @@ classdef FEM < Plots & handle
             
             % Color bar plot
             cb = colorbar;
-            cb.Label.String = 'u(z/L,\tau)/D';
+            cb.Label.String = '$ u(z/L,\tau)/D $';
             cb.Label.FontSize = this.FontSize;
             cb.Label.FontName = this.FontName;
+            cb.Label.Interpreter = Plots.interpreter;
+            set(cb,'TickLabelInterpreter',Plots.interpreter);
             
             colormap jet
             
-            % Legends
-            xlabel('\tau = t\omega_1', 'FontName', this.FontName, ...
-                'FontSize', this.FontSize)
-            ylabel('z/L', 'FontName', this.FontName, ...
-                'FontSize', this.FontSize)
+            % Labels
+            set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize,...
+                'xlim',[4960 5060],'TickLabelInterpreter',Plots.interpreter)
+            xlabel(Plots.defAxis('tau'), 'FontName', this.FontName, ...
+                'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+            ylabel(Plots.defAxis('z'), 'FontName', this.FontName, ...
+                'FontSize', this.FontSize, 'Interpreter',Plots.interpreter)
             
 %             % Adapt range to match a possible ROM scalogram 
 %             %in practice, just exclude 'timestep'
 %             newRange=[this.time(this.plot_range(1))-2*this.scalogram.dTau...
 %                 min([this.time(this.plot_range(2))+2*this.scalogram.dTau,...
 %                 SolutionOpt.tf])];
-            set(gca, 'FontName',this.FontName, 'FontSize',this.FontSize,...
-                'xlim',[4960 5060])
+            
             
         end
                 

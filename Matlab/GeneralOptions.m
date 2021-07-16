@@ -24,7 +24,7 @@ classdef GeneralOptions < handle
         include_ROM_air (1,1) logical
         
         % Show bottom/top tensions
-        plot_tensions (1,1) logical
+        plot_tensions (1,2) logical
         
         % Plot in tabs
         plotTabs (1,1) logical
@@ -45,7 +45,8 @@ classdef GeneralOptions < handle
         
         %% Constructor
         function this = GeneralOptions(FEM_water, FEM_air, ...
-                ROM_water,ROM_air, include_tension, plotTabs, saveFigs,...
+                ROM_water,ROM_air, plot_tensions, ...
+                plotTabs, saveFigs,...
                 export_data, load_data)
             
             this.include_FEM_water = FEM_water;
@@ -53,7 +54,7 @@ classdef GeneralOptions < handle
             this.include_ROM_water = ROM_water;
             this.include_ROM_air = ROM_air;
             
-            this.plot_tensions = include_tension;
+            this.plot_tensions = plot_tensions;
             this.plotTabs = plotTabs;
             
             this.saveFigs = saveFigs;
@@ -75,10 +76,6 @@ classdef GeneralOptions < handle
                 [2 4 6], 0.8101976649*[1 1 1]);
             this.FEM_freq_water = containers.Map(...
                 [2 4 6], 0.7291838433*[1 1 1]);
-%             this.FEM_freq_air = containers.Map(...
-%                 [2 4 6], [0.8101976649 1.643449687 2.501329755]);
-%             this.FEM_freq_water = containers.Map(...
-%                 [2 4 6], [0.7291838433 1.470758398 2.229918562]);
         end
         
     end

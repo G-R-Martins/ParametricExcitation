@@ -20,8 +20,8 @@ classdef GenModalCoord < Plots & handle
     
     properties (Constant)
         % Plot labels (not equals for all cases)
-        labels = struct('A',["A_1(\tau)/D" "A_2(\tau)/D" "A_3(\tau)/D"],...
-            'dA',["A_1'(\tau) / D" "A_2'(\tau) / D" "A_3'(\tau) / D"]);
+        labels = struct('A',["$A_1(\tau)/D$" "$A_2(\tau)/D$" "$A_3(\tau)/D$"],...
+            'dA',["$A_1'(\tau) / D$" "$A_2'(\tau) / D$" "$A_3'(\tau) / D$"]);
        
         % Tab titles
         titles = ["A1" "A2" "A3"];
@@ -71,10 +71,10 @@ classdef GenModalCoord < Plots & handle
             if joinPlots == false
                 axesLab = containers.Map(["A" "dA" "S_A"],...
                     [this.labels.A(k) this.labels.dA(k) ...
-                    strcat('S_Â_',num2str(k),'(f)')]);
+                    strcat('$ S_\hat{A}_',num2str(k),'(f) $')]);
             else
                 axesLab = containers.Map(["A" "dA" "S_A"],...
-                    ["A_k(\tau)/D" "A_k'(\tau) / D" "S_Â(f)"]);
+                    ["$A_k(\tau)/D$" "$A_k'(\tau) / D$" "$ S_{\hat{A}}(f) $"]);
             end
             
             % Open new tab
@@ -87,27 +87,39 @@ classdef GenModalCoord < Plots & handle
                 % Displacement time series
                 subplot(2,2,2)
                 hold on; box on;
-                xlabel('\tau = t\omega_1','FontName',this.FontName,'fontsize',this.FontSize)
-                ylabel(axesLab('A'),'FontName',this.FontName,'fontsize',this.FontSize)
-                set(gca, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot)
+                set(gca, 'fontsize', this.FontSize, ...
+                    'xlim', GeneralOptions.SolOpt.permaPlot,...
+                    'TickLabelInterpreter',Plots.interpreter)
+                xlabel(Plots.defAxis('tau'),'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                ylabel(axesLab('A'),'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                
                 
                 plot(t_sol, x_sol(:,k))%, this.lines(1,1))
                 
                 % Frequency spectrum
                 subplot(2,2,4)
                 hold on; box on;
-                xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-                ylabel(axesLab("S_A"), 'FontName', this.FontName, 'fontsize', this.FontSize)
-                set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
+                set(gca, 'FontName',this.FontName, 'fontsize',this.FontSize, ...
+                    'xlim', this.lim_plot_freq,...
+                    'TickLabelInterpreter',Plots.interpreter)
+                xlabel(Plots.defAxis('f'), 'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                ylabel(axesLab('S_A'), 'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                 
                 plot(this.freq_A_k{k}, this.ampl_A_k{k})%, this.lines(1,1))
                 
                 % Phase space
                 subplot(2,2,[1 3])
                 hold on; box on;
-                xlabel(axesLab('A'), 'FontName', this.FontName, 'fontsize', this.FontSize)
-                ylabel(axesLab('dA'), 'FontName', this.FontName, 'fontsize', this.FontSize)
-                set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize)
+                set(gca,'FontName',this.FontName,'fontsize',this.FontSize,...
+                    'TickLabelInterpreter',Plots.interpreter)
+                xlabel(axesLab('A'), 'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                ylabel(axesLab('dA'), 'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                 
                 plot(x_sol(:,k), x_sol(:,k+3))%, this.lines(1,1));
                 
@@ -115,9 +127,13 @@ classdef GenModalCoord < Plots & handle
                  % Displacement time series
                  subplot(2,1,1)
                  hold on; box on;
-                 xlabel('\tau = t\omega_1', 'FontName', this.FontName, 'fontsize', this.FontSize);
-                 ylabel(axesLab('A'),'FontName', this.FontName, 'fontsize', this.FontSize);
-                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', GeneralOptions.SolOpt.permaPlot);
+                 set(gca,'FontName',this.FontName,'fontsize',this.FontSize,...
+                     'xlim', GeneralOptions.SolOpt.permaPlot,...
+                     'TickLabelInterpreter',Plots.interpreter);
+                 xlabel(Plots.defAxis('tau'), 'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                 ylabel(axesLab('A'),'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                  
                  plot(t_sol, x_sol(:,k))%, this.lines(1,1));
                  
@@ -125,20 +141,18 @@ classdef GenModalCoord < Plots & handle
                  % Frequency spectrum
                  subplot(2,1,2)
                  hold on; box on;
-                 xlabel('f/f_1', 'FontName', this.FontName, 'fontsize', this.FontSize)
-                 ylabel(axesLab("S_A"), 'FontName', this.FontName, 'fontsize', this.FontSize)
-                 set(gca, 'FontName', this.FontName, 'fontsize', this.FontSize, 'xlim', this.lim_plot_freq)
+                 set(gca,'FontName',this.FontName,'fontsize',this.FontSize,...
+                     'xlim', this.lim_plot_freq,...
+                     'TickLabelInterpreter',Plots.interpreter)
+                 xlabel(Plots.defAxis('f'),'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
+                 ylabel(axesLab('S_A'),'FontName', this.FontName, ...
+                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                  
                  plot(this.freq_A_k{k}, this.ampl_A_k{k})%, this.lines(1,1))
             end
         end
                 
-        
-        
-        function SinglePlot(~, ~, ~)
-            error('ROM object can not use ''SinglePlot'' function');
-        end
-        
         
     end
 end

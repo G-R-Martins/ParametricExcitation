@@ -4,21 +4,21 @@ clc; close all;
 tic
 
 %% Set general options
-% Parameters = booleans to indicate which models to analyze/plot  
+% Parameters = booleans to indicate which models to analyse/plot  
 genOpt = GeneralOptions(...
     1,... analyse FEM model in water
     1,... analyse FEM model in air
     1,... analyse ROM model in water
     1,... analyse ROM model in air
-    1,... plot tensions (bottom and top)
-    1,... plot results in multiple tabs
-    0,... save ALL figures
+    [1 1],... plot tensions [top bottom]
+    0,... plot results in multiple tabs
+    1,... save ALL figures
     0,... export .mat
-    0 ... load .mat
+    1 ... load .mat
 );
 genOpt.SolOpt.n_plot = [2 4];
 
-%% Increment 'n' and show demanded data
+%% Increment 'n' and show only requested data
 for cur_n = genOpt.SolOpt.n0 : genOpt.SolOpt.dn : genOpt.SolOpt.nf
 
     %% Initialize data

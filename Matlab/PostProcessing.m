@@ -29,7 +29,7 @@ classdef PostProcessing < Plots & handle
                         sum(~cellfun(@isempty,fem)) > 0
                     
                     % separated plots
-                    figIsOpened = false; 
+                    figIsOpened = false;
                     
                     % 1 - air
                     % 2 - water
@@ -60,22 +60,23 @@ classdef PostProcessing < Plots & handle
                             
                         end %end for (air/water)
                     end % end for (air/water)
+                    
+                    % Add legend
+                    if ~genOpt.plotTabs
+                        Plots.AddLegend({'ROM - air','FEM - air',...
+                            'ROM - water','FEM - water',});
+                    end
+                    
+                    % Save results
+                    if genOpt.saveFigs == true || ...
+                            rom{cont}.out_bools.save_disp || ...
+                            fem{cont}.out_bools.save_disp
+                        set(gcf,'PaperSize',Plots.default_paperSize);
+                        print(fig, strcat(figDir,figName), ...
+                            Plots.figFormat, Plots.figRes);
+                    end
                 end % end if (cell not empty)
                 
-                % Add legend
-                if ~genOpt.plotTabs
-                    Plots.AddLegend({'ROM - air','FEM - air',...
-                                'ROM - water','FEM - water',});
-                end
-                
-                % Save results
-                if genOpt.saveFigs == true || ...
-                        rom{cont}.out_bools.save_disp || ...
-                        fem{cont}.out_bools.save_disp
-                    set(gcf,'PaperSize',Plots.default_paperSize);
-                    print(fig, strcat(figDir,figName), ...
-                        Plots.figFormat, Plots.figRes);
-                end
             end % end for (nodes)
             
             
@@ -107,7 +108,7 @@ classdef PostProcessing < Plots & handle
                     end % end for
                     
                     if ~genOpt.plotTabs
-                        Plots.AddLegend({'A_1','A_2','A_3'});
+                        Plots.AddLegend({'$A_1$','$A_2$','$A_3$'});
                     end
                     
                     %-- Save results
@@ -168,46 +169,82 @@ classdef PostProcessing < Plots & handle
             end % end for (air/water)
             
             %% Tensions
-            if genOpt.plot_tensions == true
-                % 1 - air
-                % 2 - water
-                for cont = 1:2
-                    if ~isempty(rom{cont}) || ~isempty(fem{cont})
-                        if cont == 1
-                            figname = strcat('Tensions-n=',num2str(n),...
-                                "-air");
-                        else
-                            figname = strcat('Tensions-n=',num2str(n),...
-                                "-water");
+            
+            % 1 - top
+            % 2 - bottom
+            for pos = 1:2
+                if genOpt.plot_tensions(pos) == true
+                    
+                    figIsOpened = false;
+                    
+                    % Lacation of the tension
+                    if pos == 1; legLoc = "-top"; else; legLoc = "-bottom"; end
+                    
+                    % Legend
+                    leg = {};
+%                     leg=cell(1,... legend
+%                         sum(~cellfun(@isempty,rom))+sum(~cellfun(@isempty,fem)));
+%                     legCont = 1; % count legend labels
+                    
+                    % 1 - air
+                    % 2 - water
+                    for env = 1:2
+                        % Enviroment identification (for the legend)
+                        if env == 1;  legEnv = "-air";
+                        else;          legEnv = "-water";
                         end
-                        Plots.OpenFig(figname,'\tau = t\omega_1','Tension [N]',...
-                            SolutionOpt.permaPlot);
                         
-                    end
+                        %-- Open a new figure
+                        if ~figIsOpened && ~genOpt.plotTabs
+                            
+                            figName = strcat('Tensions-n=',num2str(n),...
+                                legLoc);
+                            fig = Plots.OpenFig(figName,...
+                                Plots.defAxis('tau'),'Tension [N]',...
+                                SolutionOpt.permaPlot);
+                            
+                            % Set boolean to true to avoid a new fig
+                            figIsOpened = true;
+                        end % end if (open figure)
+                        
+                        
+                        % Check existing data to plot
+                        if ~isempty(rom{env})
+                            rom{env}.SetTensions(n,pos);
+                            rom{env}.PlotTensions(pos);
+                            %-- legend
+                            leg{size(leg,2)+1} = strcat('ROM',legEnv);
+                        end
+                        if ~isempty(fem{env})
+                            fem{env}.SetTensions(pos);
+                            fem{env}.PlotTensions(pos);
+                            %-- legend
+                            leg{size(leg,2)+1} = strcat('FEM',legEnv);
+                        end
+                        
+                        % Add legend
+                        %-- multiple tabs  ||  after all data were plotted
+                        if genOpt.plotTabs || env == 2
+                            Plots.AddLegend(leg);
+                        end
+                        
+                        % Save results
+                        if env == 2 && ~genOpt.plotTabs &&  ...
+                                ( genOpt.saveFigs == true || ...
+                                rom{env}.out_bools.save_disp || ...
+                                fem{env}.out_bools.save_disp )
+                            
+                            set(gcf,'PaperSize',Plots.default_paperSize);
+                            print(fig, strcat(figDir,figName), ...
+                                Plots.figFormat, Plots.figRes);
+                        end
+                        
+                    end % end for (cases air/water)
                     
-                    %% Check existing data
-                    %                     leg={};
-                    if ~isempty(rom{cont})
-                        rom{cont}.SetTensions(n);
-                        rom{cont}.PlotTensions();
-                        %                         leg{1}= 'Rom';
-                    end
-                    if ~isempty(fem{cont})
-                        fem{cont}.SetTensions();
-                        fem{cont}.PlotTensions();
-                        %                         leg{size(leg,2)+1}='FEM';
-                    end
-                    
-                    %-- legend
-                    %                     legend(leg,'FontName', this.FontName, 'FontSize', ...
-                    %                         this.FontSizeLegend, 'Location', 'southwest');
-                    
-                end % end for (cases air/water)
-                
-            end % end if
+                end % end if (plot tensions)
+            end % end for (top/bottom locations)
             
         end % function
-        
+
     end % methods
-    
 end % class
