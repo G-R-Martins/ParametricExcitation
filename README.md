@@ -4,7 +4,7 @@ Source code of a parametric excitation research developed at `University of São
 ## Introduction 
 
 ### Reduced order model (ROM)
-The [main code](https://github.com/G-R-Martins/ParametricExcitation/tree/main/Matlab) (write in [Matlab](https://www.mathworks.com/products/matlab.html)) is a simple tool to evaluate the dynamics of a vertical slender beam under parametric excitation. This code also can do a comparison with some numerical simulations (in the present case, an in-house FEM solver was used, called **Giraffe**).
+The [main code](https://github.com/G-R-Martins/ParametricExcitation/tree/main/Matlab) (write in [Matlab](https://www.mathworks.com/products/matlab.html) **R2019a**) is a simple tool to evaluate, using a ROM, the dynamics of a vertical slender beam under parametric excitation. This code also can do a comparison with some numerical simulations (in the present case, an in-house FEM solver was used, called **Giraffe**).
 
 - Assumptions about the model:
   1. Bernoulli-Euler beam formulation;
@@ -13,24 +13,26 @@ The [main code](https://github.com/G-R-Martins/ParametricExcitation/tree/main/Ma
   4. Galerkin's method with three sinusoidal shape functions.
 
 ### Mathematical formulation
-Obtaining the ROM can be a laborious task, thus to help with this, a [Wolfram Mathematica](https://www.wolfram.com/mathematica/) script is provided [here](https://github.com/G-R-Martins/ParametricExcitation/blob/main/Mathematica/NonDim-Eqs.nb). With this script one can obtain and check the nondimensional equations of the ROM and easily perform some different postprocessing.
+Obtaining the ROM can be a laborious task, thus to help with this, a [Wolfram Mathematica](https://www.wolfram.com/mathematica/) script is provided [here](https://github.com/G-R-Martins/ParametricExcitation/blob/main/Mathematica/NonDim-Eqs.nb). With this script one can obtain and check the nondimensional equations of the ROM and easily adapte it to perform some different pre/postprocessing.
 
 ### FEM solver - Giraffe
-The **Giraffe** (Generic Interface For Finite Element) code was used to evaluate numerically the beam. It is a FEM-based solver, also developed at `University of São Paulo` by prof. [Alfredo Gay Neto](http://sites.poli.usp.br/p/alfredo.gay/) and his research group. In this study, it is used the Timoshenko's geometrically exact beam formulation implemented in Giraffe to describe the structure.
+The **Giraffe** (Generic Interface For Finite Element) software was used to evaluate numerically the beam. It is a FEM-based solver, also developed at `University of São Paulo` by prof. [Alfredo Gay Neto](http://sites.poli.usp.br/p/alfredo.gay/) and his research group. In this study, it is used the Timoshenko's geometrically exact beam formulation implemented in Giraffe to describe the structure.
 
 
 ## Using the code
 
-For now, there is no GUI ~~and this will probably take some time, if it actually happens~~. To change the general I/O options, you have to change the parameters for the `GeneralOptions` constructor:
+For now, there is no GUI ~~and this will probably take some time, if it actually happens~~ to this program. But, as it is only some scripts to solve a system of equations and postprocess the results, this should not be a problem. 
+
+You can change some I/O options in the `main.m` file according to your needs. To do this, you just have to change the parameters for the `GeneralOptions` constructor:
 ```matlab 
 genOpt = GeneralOptions(...
     1,... evaluate FEM model in water
     1,... evaluate FEM model in air
     1,... evaluate ROM model in water
     1,... evaluate ROM model in air
-    1,... plot tensions (bottom and top)
+    [1 1],... plot tensions [top bottom]
     1,... plot results in multiple tabs (if false individual figures are opened, like in the paper and in ".\figs" folder)
-    0,... save ALL figures
+    1,... save ALL figures (the default option is to save PDF figures)
     0,... export .mat
     1 ... load .mat
 );
