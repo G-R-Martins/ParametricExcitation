@@ -9,9 +9,9 @@ function [shpFun, rom, fem] = SetModel(gOpt, n)
     if gOpt.include_ROM_water == true
         rom{2} = ROM(0.112982,true, gOpt.ROM_freq_water(n), 33.4405);
         rom{2}.SetOutputOptions(...
-            0, ... displacement time series
-            0, ... scalogram
-            0, ... tension
+            0, ... save displacement time series
+            0, ... save scalogram
+            0, ... save tension
             1, ... show phaseSpace
             1  ... show scalogram
         );
@@ -29,9 +29,9 @@ function [shpFun, rom, fem] = SetModel(gOpt, n)
     if gOpt.include_ROM_air == true
         rom{1} = ROM(0.130464, false, gOpt.ROM_freq_air(n), 38.40686);
         rom{1}.SetOutputOptions(...
-            0, ... displacement time series
-            0, ... scalogram
-            0, ... tension
+            0, ... save displacement time series
+            0, ... save scalogram
+            0, ... save tension
             1, ... show phaseSpace
             1  ... show scalogram
         );
