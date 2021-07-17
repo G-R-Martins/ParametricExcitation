@@ -63,7 +63,7 @@ classdef ROM < Plots & handle
     end
     
     properties (Constant)
-        titles = ["$ u(L/4) $" "$ u(L/2) $" "$ u(3L/4) $"];
+        titles = ["u(L/4)" "u(L/2)" "u(3L/4)"];
         labels = struct('u',["$u (L/4,\tau)/D $" "$ u(L/2,\tau)/D $" "$ u(3L/4,\tau)/D $"],...
             'du',["$ u'(L/4,\tau)/D $" "$ u'(L/2,\tau)/D $" "$ u'(3L/4,\tau)/D $"]);
         
@@ -101,8 +101,8 @@ classdef ROM < Plots & handle
                 this.Cd = 0;
                 this.gamma = beamData.mu * Environment.grav;
             else
-                this.mu_a = beamData.mu_d;
-                this.Cd = 1.2; %1.2
+                this.mu_a = beamData.mu_d; % to get Ca=1
+                this.Cd = 1.2; 
                 this.gamma = beamData.mu * Environment.grav ...
                     - Environment.rho*Environment.grav*pi*beamData.d^2/4;
             end
@@ -305,7 +305,7 @@ classdef ROM < Plots & handle
                     'xlim', this.lim_plot_freq,'TickLabelInterpreter',Plots.interpreter)
                 xlabel(Plots.defAxis('f'), 'FontName', this.FontName, ...
                     'FontSize',this.FontSize,'Interpreter',Plots.interpreter)
-                ylabel('$ S_\hat{u}(f) $', 'FontName', this.FontName, ...
+                ylabel('$S_{\hat{u}}(f)$', 'FontName', this.FontName, ...
                     'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                 
                 plot(this.Freq{k}, this.Ampl{k},this.lines(1,1+2*this.isImmersed))
@@ -346,7 +346,7 @@ classdef ROM < Plots & handle
                      'xlim',this.lim_plot_freq,'TickLabelInterpreter',Plots.interpreter)
                  xlabel(Plots.defAxis('f'), 'FontName', this.FontName, ...
                      'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
-                 ylabel('$ S_\hat{u}(f) $', 'FontName', this.FontName,...
+                 ylabel('$S_{\hat{u}}(f)$', 'FontName', this.FontName,...
                      'FontSize',this.FontSize, 'Interpreter',Plots.interpreter)
                  
                  plot(this.Freq{k}, this.Ampl{k}, this.lines(1,1+2*this.isImmersed))

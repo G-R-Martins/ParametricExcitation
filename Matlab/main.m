@@ -12,7 +12,7 @@ genOpt = GeneralOptions(...
     1,... analyse ROM model in air
     [1 1],... plot tensions [top bottom]
     0,... plot results in multiple tabs
-    1,... save ALL figures
+    0,... save ALL figures
     0,... export .mat
     1 ... load .mat
 );
@@ -24,25 +24,26 @@ for cur_n = genOpt.SolOpt.n0 : genOpt.SolOpt.dn : genOpt.SolOpt.nf
     %% Initialize data
     db = strcat('..\Data\Database-n',num2str(cur_n),'.mat');
     
-    % Read data
+    % Load data
     if genOpt.load_data == true
         load(db);
+    % Or read and analyse
     else
         [shpFun, rom, fem] = SetModel(genOpt, cur_n);
+        
+        
+        %% Solve EDOs, evaluate displacements and modal response, and plot results
+        if ~isempty(rom)
+            rom = Analysis.ROMs(rom, shpFun, cur_n);
+        end
+        
+        
+        %% Finite Element Model (Giraffe) data -> evaluate espectrum
+        if sum(~cellfun(@isempty,fem)) && ismember(cur_n, genOpt.SolOpt.n_plot)
+            fem = Analysis.FEMs(fem);
+        end
+        
     end
-    
-    
-    %% Solve EDOs, evaluate displacements and modal response, and plot results
-    if ~isempty(rom)
-        rom = Analysis.ROMs(rom, shpFun, cur_n);
-    end
-    
-    
-    %% Finite Element Model (Giraffe) data -> evaluate espectrum
-    if sum(~cellfun(@isempty,fem)) && ismember(cur_n, genOpt.SolOpt.n_plot)
-        fem = Analysis.FEMs(fem);
-    end
-    
     
     %% Show results
     if ismember(cur_n, genOpt.SolOpt.n_plot)

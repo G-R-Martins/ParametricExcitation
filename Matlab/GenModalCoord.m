@@ -71,10 +71,10 @@ classdef GenModalCoord < Plots & handle
             if joinPlots == false
                 axesLab = containers.Map(["A" "dA" "S_A"],...
                     [this.labels.A(k) this.labels.dA(k) ...
-                    strcat('$ S_\hat{A}_',num2str(k),'(f) $')]);
+                    strcat('$S_{\hat{A}_',num2str(k),'}(f) $')]);
             else
                 axesLab = containers.Map(["A" "dA" "S_A"],...
-                    ["$A_k(\tau)/D$" "$A_k'(\tau) / D$" "$ S_{\hat{A}}(f) $"]);
+                    ["$A_k(\tau)/D$" "$A_k'(\tau) / D$" "$S_{\hat{A}}(f)$"]);
             end
             
             % Open new tab
