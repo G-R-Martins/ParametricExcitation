@@ -70,7 +70,7 @@ classdef ShapeFunctions < Plots & handle
             % Save figure
             if this.save_fig == true
                 set(gcf,'PaperSize', this.default_paperSize);
-                print(fullfile(this.dir_fig, name), this.figFormat, '-r1000')
+                print(fullfile(this.dir_fig, name), this.figFormat, this.figRes)
             end
             
             hold off

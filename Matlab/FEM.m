@@ -54,7 +54,7 @@ classdef FEM < Plots & handle
     
     
     properties (Constant)
-        titles = ["$ u(L/4) $" "$ u(L/2) $" "$ u(3L/4) $"]
+        titles = ["u(L/4)" "u(L/2)" "u(3L/4)"]
         labels = struct('u',["$ u(L/4,\tau)/D $" "$ u(L/2,\tau)/D $" "$ u(3L/4,\tau)/D $"],...
             'du',[" $u'(L/4,\tau)/D $" "$ u'(L/2,\tau)/D $" "$ u'(3L/4,\tau)/D $"])
         
