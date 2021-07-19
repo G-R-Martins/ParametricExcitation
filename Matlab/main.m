@@ -11,11 +11,12 @@ genOpt = GeneralOptions(...
     1,... analyse ROM model in water
     1,... analyse ROM model in air
     [1 1],... plot tensions [top bottom]
-    0,... plot results in multiple tabs
+    1,... plot results in multiple tabs
     0,... save ALL figures
     0,... export .mat
     1 ... load .mat
 );
+
 genOpt.SolOpt.n_plot = [2 4];
 
 %% Increment 'n' and show only requested data
