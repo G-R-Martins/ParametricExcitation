@@ -17,7 +17,7 @@ genOpt = GeneralOptions(...
     1 ... load .mat
 );
 
-genOpt.SolOpt.n_plot = [2 4];
+genOpt.SolOpt.n_plot = [2];
 
 %% Increment 'n' and show only requested data
 for cur_n = genOpt.SolOpt.n0 : genOpt.SolOpt.dn : genOpt.SolOpt.nf
