@@ -6,7 +6,7 @@ classdef SolutionOpt < handle
     
     properties (Constant, GetAccess = public)
         % Initial conditions
-        x0 = 0.1*[1;1;1;0;0;0];
+        x0 = 0.1*[1; 1; 1; 0; 0; 0];
         
         % Time 
         ti = 0;
